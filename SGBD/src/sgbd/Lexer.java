@@ -1,14 +1,20 @@
 package sgbd;
+/*@author kaimorts*/
 
 import java.util.StringTokenizer;
 
-/*@author kaimo*/
 public class Lexer {
-    private String CDB_MAYUS = "CREATE DATABASE ";
-    private String CDB_minus = "create database ";
-    private String CTB_MAYUS = "CREATE TABLE ";
-    private String CTB_minus = "create table ";
+    private String CDB_MAYUS;
+    private String CDB_minus;
+    private String CTB_MAYUS;
+    private String CTB_minus;
     
+    public Lexer(){
+        CDB_MAYUS = "CREATE DATABASE ";
+        CDB_minus = "create database ";
+        CTB_MAYUS = "CREATE TABLE ";
+        CTB_minus = "create table ";
+    }
     public String getNameDB(String SQL_QUERY){
         String name_BD="";
         String segment[];
