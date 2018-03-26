@@ -1,4 +1,4 @@
-package sgbd;
+package sgbd.Objects;
 
 /*@author kaimorts*/
 import java.util.LinkedList;

@@ -1,7 +1,7 @@
 package sgbd;
 
 import java.util.Scanner;
-
+import sgbd.Auxiliar.*;
 /*@author Kaimorts*/
 public class prueba_01 {
     public static String name_BD="";
