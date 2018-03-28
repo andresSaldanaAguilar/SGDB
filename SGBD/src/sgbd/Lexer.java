@@ -1,9 +1,7 @@
-package sgbd.Auxiliar;
+package sgbd;
 /*@author kaimorts*/
-
 import java.util.StringTokenizer;
 
-/*@author kaimo*/
 public class Lexer {    
     private String[] CREATE_BD = {"CREATE DATABASE ", "create database "};
     private String[] CREATE_TB = {"CREATE TABLE ", "create table "};
@@ -82,4 +80,6 @@ public class Lexer {
         }
         return BD_toUse;
     }
+    
+    
 }

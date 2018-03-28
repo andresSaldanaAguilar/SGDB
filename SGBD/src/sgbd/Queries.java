@@ -1,7 +1,7 @@
-package sgbd.Auxiliar;
+package sgbd;
 
 /*@author kaimorts*/
-import sgbd.Objects.*;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
