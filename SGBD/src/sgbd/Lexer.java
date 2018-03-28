@@ -2,7 +2,8 @@ package sgbd;
 /*@author kaimorts*/
 import java.util.StringTokenizer;
 
-public class Lexer {    
+public class Lexer {   
+    
     private String[] CREATE_BD = {"CREATE DATABASE ", "create database "};
     private String[] CREATE_TB = {"CREATE TABLE ", "create table "};
     private String[] USE_BD    = {"USE DATABASE ","use database "};

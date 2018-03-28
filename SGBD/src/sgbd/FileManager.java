@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  *
  * @author andressaldana: esta clase lee los registros en el archivo y retorna una lista de objetos

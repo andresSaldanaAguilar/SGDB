@@ -3,6 +3,7 @@ package sgbd;
 import java.util.Scanner;
 /*@author Kaimorts*/
 public class prueba_01 {
+    
     public static String name_BD="";
     public static String name_TB="";
     

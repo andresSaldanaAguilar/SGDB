@@ -5,7 +5,8 @@ package sgbd;
 import java.util.Scanner;
 
 
-public class SGBD {    
+public class SGBD {   
+    
     public static void main(String[] args) {
         Lexer a = new Lexer();
         Queries qr = new Queries();
