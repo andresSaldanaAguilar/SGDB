@@ -11,7 +11,7 @@ public class Lexer {
     public String getNameDB(String SQL_QUERY){
         String name_BD="";
         String segment[];
-        
+       
         if (SQL_QUERY.contains(CREATE_BD[0])) {
             segment = SQL_QUERY.split(CREATE_BD[0]);
             name_BD = segment[1];

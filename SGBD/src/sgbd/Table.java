@@ -3,7 +3,6 @@ package sgbd;
 /*@author kaimorts */
 import java.util.HashMap;
 
-
 public class Table extends HashMap<String,Register>{
     private HashMap TABLE;
     private String NAME_DATABASE;

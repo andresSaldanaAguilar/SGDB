@@ -4,7 +4,6 @@ package sgbd;
 
 import java.util.Scanner;
 
-
 public class SGBD {   
     
     public static void main(String[] args) {
