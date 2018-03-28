@@ -24,7 +24,7 @@ public class SGBD {
                 
                 if (query.contains("table")||query.contains("TABLE")) {
                     qr.CREATE_TABLE(query);
-                }else if(query.contains("DATABASE") || query.contains("DATABASE")){
+                }else if(query.contains("database") || query.contains("DATABASE")){
                     qr.CREATE_DB(query);
                     qr.SHOW_DATABASES();
                 }
