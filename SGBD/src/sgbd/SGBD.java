@@ -6,12 +6,13 @@ import java.util.Scanner;
 
 public class SGBD {   
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Lexer a = new Lexer();
         Queries qr = new Queries();
         boolean continua=true;
         String query="";
         Scanner teclado = new Scanner(System.in);
+        
         do {
             System.out.print("|-> ");
             query="";
@@ -25,7 +26,7 @@ public class SGBD {
                 if (query.contains("table")||query.contains("TABLE")) {
                     qr.CREATE_TABLE(query);
                 }else if(query.contains("database") || query.contains("DATABASE")){
-                    qr.CREATE_DB(query);
+                    qr.CREATE_DB(query);                    
                     qr.SHOW_DATABASES();
                 }
             }    

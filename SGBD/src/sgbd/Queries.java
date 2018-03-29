@@ -13,6 +13,8 @@ public class Queries {
     private Table TABLE;
     private Lexer LEXER;
     private Register REGISTER;
+    /*creating the client who's gonna be sending data to the server*/
+    private Client client= new Client();
     
     public Queries(){
         KEY_HASHMAP = "";
@@ -23,13 +25,15 @@ public class Queries {
     }
     
     /*----------------- QUERIES OF DATABASES --------------------------*/
-    public void CREATE_DB(String QUERY_CREATE_BD){  /*CREATE A NEW DATABASE*/
+    public void CREATE_DB(String QUERY_CREATE_BD) throws Exception{  /*CREATE A NEW DATABASE*/
         KEY_HASHMAP = LEXER.getNameDB(QUERY_CREATE_BD);
         if (KEY_HASHMAP!=null) {
             if (DATABASES.containsKey(KEY_HASHMAP))
                 System.out.println("Database "+KEY_HASHMAP+" already exits");
-            else
+            else{
                 DATABASES.put(KEY_HASHMAP, TABLE);
+                //client.createDB(KEY_HASHMAP); //uncomment to try create DB
+            }
         }else
             System.out.println("ERROR: DATABASE CAN'T BE NULL");
     }

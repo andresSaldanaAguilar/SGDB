@@ -1,5 +1,6 @@
-package sgbd;
 
+
+import sgbd.*;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.logging.Level;
