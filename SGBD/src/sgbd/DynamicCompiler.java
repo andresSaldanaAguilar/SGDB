@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
  
@@ -31,7 +32,7 @@ import javax.tools.ToolProvider;
 public class DynamicCompiler
 {
     /** where shall the compiled class be saved to (should exist already) */
-    private static String classOutputFolder = "./DB";
+    private static String classOutputFolder = "./build/classes";
     
     public DynamicCompiler(String classOutputFolder){
         this.classOutputFolder += classOutputFolder;
@@ -72,33 +73,13 @@ public class DynamicCompiler
  
     /** Get a simple Java File Object ,<br>
      * It is just for demo, content of the source code is dynamic in real use case */
-    private static JavaFileObject getJavaFileObject()
+    public static JavaFileObject getJavaFileObject(String str,String classname)
     {
-        String contents = "/*package math;*/"+
-                "public class Tabla1 { "
-                +"public int id,edad;"
-                +"public String nombre;"
-                + "  public int getId(){ "
-                + "    return this.id; }"
-                + "  public String getNombre(){ "
-                + "    return this.nombre; }"
-                + "  public int getEdad(){ "
-                + "    return this.edad; }"
-                + "  void setId(int id){ "
-                + "    this.id=id; }"
-                + "  public void setNombre(String nombre){ "
-                + "    this.nombre=nombre; }"
-                + "  public void setEdad(int edad){ "
-                + "    this.edad=edad; }"
-                + "  public static void main(String[] args) { "
-                + "    Tabla1 t = new Tabla1(); "
-                + "    t.setId(1); t.setNombre(\"Pepe\"); t.setEdad(40); "
-                +"   System.out.println(\"Termina codigo en memoria\");"
-                + "  } " + "} ";
+        String contents = str;
         JavaFileObject jfo = null;
         try
         {
-            jfo = new InMemoryJavaFileObject("/*math.Tabla1*/Tabla1", contents);
+            jfo = new InMemoryJavaFileObject("/*math."+classname+"*/"+classname, contents);
         }
         catch (Exception exception)
         {
@@ -131,7 +112,7 @@ public class DynamicCompiler
     }
  
     /** run class from the compiled byte code file by URLClassloader */
-    public static void runIt()
+    public static void runIt(String classname)
     {
         // Create a File object on the root of the directory
         // containing the class file
@@ -148,7 +129,7 @@ public class DynamicCompiler
             System.out.println("crea cargador de clase");
             // Load in the class; Class.childclass should be located in
             // the directory file:/class/demo/
-            Class thisClass = loader.loadClass("Tabla1");
+            Class thisClass = loader.loadClass(classname);
             Class params[] = {};
             System.out.println("Cargo bien la clase");
             //Object paramsObj[] = {};
@@ -159,19 +140,19 @@ public class DynamicCompiler
             Method thisMethod = thisClass.getDeclaredMethod("setNombre", params);
             */
             /*******************/
-        String ClassName = "Tabla1";
+        String ClassName = classname;
         Class<?> tClass = Class.forName(ClassName); // convert string classname to class
         Object tabla = tClass.newInstance(); // invoke empty constructor
             System.out.println("Genero bien instancia "+tabla.getClass().getName());
         String methodName = "";
 
         // with single parameter, return void
-        methodName = "setNombre";
+        methodName = "setuno";
         Method setNameMethod = tabla.getClass().getMethod(methodName, String.class);
-        setNameMethod.invoke(tabla, "Pepe"); // pass arg
+        setNameMethod.invoke(tabla, 1); // pass arg
 
         // without parameters, return string
-        methodName = "getNombre";
+        methodName = "getuno";
         Method getNameMethod = tabla.getClass().getMethod(methodName);
         String name = (String) getNameMethod.invoke(tabla); // explicit cast
             System.out.println("Valor devuelto por metodo:"+name);
@@ -186,27 +167,61 @@ public class DynamicCompiler
         }
         catch (MalformedURLException e)
         {
+            System.out.println("malformedURL");
         }
         catch (ClassNotFoundException e)
         {
+            System.out.println("class not found");
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
     }
+    
+    public static String classBuilder(ArrayList<String> genclass){
+        String stringb= "/*package math;*/ public class "+genclass.get(0)+" {";
+        //concatenate the attributes
+        for(int i = 1; i < genclass.size(); i++){
+            stringb+= "public " + genclass.get(i);
+        }
+        //getting the attribute name and datatype for getters an setters
+        ArrayList<String> attributes = new ArrayList();
+        ArrayList<String> datatypes = new ArrayList();
+        for(int i = 1; i < genclass.size(); i++){
+            String[] parts = genclass.get(i).split(" ");          
+            attributes.add(parts[1]);
+            datatypes.add(parts[0]);
+        }
+
+        for(int i = 0; i < attributes.size(); i++){
+            //setter
+            stringb+= "public void set"+ attributes.get(i) +"("+datatypes.get(i)+" "+attributes.get(i)+"){this."+ attributes.get(i)+"="+attributes.get(i)+";}";                
+            //getter
+            stringb+= "public "+ datatypes.get(i) +" get"+ attributes.get(i) +"(){ return this."+ attributes.get(i) +";}";               
+        }
+        stringb+="}";
+        System.out.println(stringb);
+        return stringb;
+    }
  
     public static void main(String[] args) throws Exception
     {
         //1.Construct an in-memory java source file from your dynamic code
-        JavaFileObject file = getJavaFileObject();
+        ArrayList<String>  al= new ArrayList();
+        al.add("nada");
+        al.add("int uno ;");
+        al.add("int dos ;");
+        String str = classBuilder(al);
+           
+        JavaFileObject file = getJavaFileObject(str,al.get(0));
         Iterable<? extends JavaFileObject> files = Arrays.asList(file);
         
         //2.Compile your files by JavaCompiler
         compile(files);
  
         //3.Load your class by URLClassLoader, then instantiate the instance, and call method by reflection
-        runIt();
+        runIt(al.get(0));
         System.out.println("fin del programa..");
       }
 }

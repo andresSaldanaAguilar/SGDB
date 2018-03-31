@@ -3,10 +3,16 @@ package sgbd;
 /*@author kaimorts*/
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javax.tools.JavaFileObject;
+import static sgbd.DynamicCompiler.classBuilder;
+import static sgbd.DynamicCompiler.compile;
+import static sgbd.DynamicCompiler.getJavaFileObject;
+import static sgbd.DynamicCompiler.runIt;
 
 public class Queries {
     private String KEY_HASHMAP;
@@ -95,7 +101,21 @@ public class Queries {
             else
                 TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
             
-            return LEXER.getDataTable(QUERY_CREATE_TB);         /*Regresa un ArrayList con los atributos de la tabla*/
+            ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
+            
+            /*creando la clase (tabla)*/
+            String str = classBuilder(dt);
+            JavaFileObject file = getJavaFileObject(str,dt.get(0));
+            Iterable<? extends JavaFileObject> files = Arrays.asList(file);
+
+            //Compilando archivo
+            compile(files);
+
+            //corre la clase (en progreso)
+            //runIt(dt.get(0));
+
+            
+            return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
         }else{
             System.out.println("ERROR: TABLE CAN'T BE NULL");
             return null;
