@@ -2,6 +2,7 @@ package sgbd;
 
 /*@author kaimorts*/
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,8 +14,6 @@ public class Queries {
     private Table TABLE;
     private Lexer LEXER;
     private Register REGISTER;
-    /*creating the client who's gonna be sending data to the server*/
-    private Client client= new Client();
     
     public Queries(){
         KEY_HASHMAP = "";
@@ -25,17 +24,22 @@ public class Queries {
     }
     
     /*----------------- QUERIES OF DATABASES --------------------------*/
-    public void CREATE_DB(String QUERY_CREATE_BD) throws Exception{  /*CREATE A NEW DATABASE*/
+    public boolean CREATE_DB(String QUERY_CREATE_BD){  /*CREATE A NEW DATABASE*/
+        boolean isCreated;
         KEY_HASHMAP = LEXER.getNameDB(QUERY_CREATE_BD);
         if (KEY_HASHMAP!=null) {
-            if (DATABASES.containsKey(KEY_HASHMAP))
+            if (DATABASES.containsKey(KEY_HASHMAP)){
                 System.out.println("Database "+KEY_HASHMAP+" already exits");
-            else{
+                isCreated = false;
+            }else{
                 DATABASES.put(KEY_HASHMAP, TABLE);
-                //client.createDB(KEY_HASHMAP); //uncomment to try create DB
+                isCreated=true;
             }
-        }else
+        }else{
             System.out.println("ERROR: DATABASE CAN'T BE NULL");
+            isCreated = false;    
+        }
+        return isCreated;
     }
     
     public void SHOW_DATABASES(){       /*SHOW EXISTING DATABASES*/
@@ -77,7 +81,7 @@ public class Queries {
     
     /*---------------------- QUERIES OF TABLES -------------------------*/
     
-    public void CREATE_TABLE(String QUERY_CREATE_TB){
+    public ArrayList<String> CREATE_TABLE(String QUERY_CREATE_TB){
         System.out.println("CREATE TABLE INSIDE "+TABLE.getNAME_DATABASE());
         String KEY_HASHMAP_TB="";
         KEY_HASHMAP_TB = LEXER.getNameTable(QUERY_CREATE_TB);
@@ -90,9 +94,16 @@ public class Queries {
                                        +" already exists inside "+TABLE.getNAME_DATABASE());
             else
                 TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
-        }else
+            
+            return LEXER.getDataTable(QUERY_CREATE_TB);         /*Regresa un ArrayList con los atributos de la tabla*/
+        }else{
             System.out.println("ERROR: TABLE CAN'T BE NULL");
-        
+            return null;
+        }
+    }
+    
+    public boolean isCreatedTable(Object verification){ 
+        return verification!=null;
     }
     
     public void SHOW_TABLES(){      /*SHOW EXISTING TABLES INSIDE OF A DATABASE*/
