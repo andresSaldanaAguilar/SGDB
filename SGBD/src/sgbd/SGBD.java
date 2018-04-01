@@ -44,6 +44,12 @@ public class SGBD {
                     dc.SHOW_DATABASES();
                 }
             }
+            if (query.contains("DROP")||query.contains("drop")) {
+                if (query.contains("DATABASE")||query.contains("database")) {
+                    if (dc.DROP_DATABASE(query)) 
+                        dc.SHOW_DATABASES();
+                }
+            }
         } while (continua);
     }
 }
