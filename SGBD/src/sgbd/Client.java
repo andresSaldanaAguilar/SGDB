@@ -68,9 +68,8 @@ public class Client {
     
     public static void main(String[] args)throws Exception{
         Client c= new Client();
+        c.getDBs();
         ArrayList<String> dbs = c.getTables("db");
-        for(String db: dbs){
-            System.out.println(db);
-        }
+        
     }
 }

@@ -27,7 +27,7 @@ public class Server {
             Socket socket = listener.accept();
             System.out.println("Client connection");
             ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
+            //ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
             /*files config*/
             
             boolean done = false;
@@ -64,18 +64,18 @@ public class Server {
                 //sending databases
                 case 3:
                     ArrayList<String> databases = fm.getDBs();
+                    ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
                     dout.writeObject(databases);
                     dout.flush();
-                    dout.close();
                     System.out.println("Data Sended");
                     break;
                  //example the selected tables
                 case 4:
                     String dbname = dIn.readUTF();
                     ArrayList<String> tables = fm.getTables(dbname);
-                    dout.writeObject(tables);
-                    dout.flush();
-                    dout.close();
+                    ObjectOutputStream dout1 = new ObjectOutputStream(socket.getOutputStream());
+                    dout1.writeObject(tables);
+                    dout1.flush();
                     System.out.println("Data Sended");
                     break;
                 default:
@@ -83,6 +83,7 @@ public class Server {
                 }
             
             }
+            //dout.close();
             dIn.close();
         }
     }
