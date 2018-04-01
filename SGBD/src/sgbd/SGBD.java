@@ -8,7 +8,7 @@ public class SGBD {
     public static String name_BD="";
     public static String name_TB="";
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Lexer a = new Lexer();
         Queries dc = new Queries();
         boolean continua=true;

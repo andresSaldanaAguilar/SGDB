@@ -2,6 +2,7 @@ package sgbd;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Client {
@@ -10,12 +11,23 @@ public class Client {
     void createDB(String name) throws Exception{
         Socket socket = new Socket("localhost",3000);
         ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
-        // Send first message
+        // Send first the action
         dOut.writeByte(1);
         dOut.writeUTF(name);
         dOut.flush(); 
+        dOut.close();
+    }
+    
+    void createTable(ArrayList<String> al) throws Exception{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(2);
+        dOut.writeObject(al);
+        dOut.flush(); 
         //dOut.close();
     }
+    
     
     /*public static void main(String[] args)throws Exception{
             Socket socket = new Socket("localhost",3000);

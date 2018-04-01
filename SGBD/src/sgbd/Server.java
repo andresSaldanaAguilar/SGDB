@@ -7,6 +7,12 @@ import java.util.LinkedList;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import javax.tools.JavaFileObject;
+import static sgbd.DynamicCompiler.classBuilder;
+import static sgbd.DynamicCompiler.compile;
+import static sgbd.DynamicCompiler.getJavaFileObject;
 import sgbd.FileManager;
 
 public class Server {
@@ -15,6 +21,7 @@ public class Server {
             /*server config*/
             ServerSocket listener = new ServerSocket(3000);
             System.out.println("Server Running");
+            while(true){
             Socket socket = listener.accept();
             System.out.println("Client connection");
             ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
@@ -37,10 +44,20 @@ public class Server {
                     String name = dIn.readUTF();
                     fm.CreateDB(name);
                     break;
-                //example for objects
+                //case create table
                 case 2:
-                    //Objeto ob2 = (Objeto)dIn.readObject();
-                    //System.out.println("Object.x: " + ob2.x+ " Object.y: " +ob2.y);
+                    ArrayList<String> al = (ArrayList<String>) dIn.readObject();
+                                
+                    /*creando la clase (tabla)*/
+                    String str = classBuilder(al);
+                    JavaFileObject file = getJavaFileObject(str,al.get(0));
+                    Iterable<? extends JavaFileObject> files = Arrays.asList(file);
+
+                    //Compilando archivo
+                    compile(files);
+
+                    //corre la clase (en progreso)
+                    //runIt(dt.get(0));
                     break;
                 //example for strings
                 case 3:
@@ -49,9 +66,12 @@ public class Server {
                     break;
                 default:
                     done = true;
-                } 
+                }
+            
+            }
+            dIn.close();
             }
 
-            dIn.close();
+
 	}
 }

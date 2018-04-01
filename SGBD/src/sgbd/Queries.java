@@ -20,6 +20,7 @@ public class Queries {
     private Table TABLE;
     private Lexer LEXER;
     private Register REGISTER;
+    private Client CL;
     
     public Queries(){
         KEY_HASHMAP = "";
@@ -27,10 +28,11 @@ public class Queries {
         LEXER = new Lexer();
         REGISTER = new Register();
         TABLE = new Table();
+        CL = new Client();
     }
     
     /*----------------- QUERIES OF DATABASES --------------------------*/
-    public boolean CREATE_DB(String QUERY_CREATE_BD){  /*CREATE A NEW DATABASE*/
+    public boolean CREATE_DB(String QUERY_CREATE_BD) throws Exception{  /*CREATE A NEW DATABASE*/
         boolean isCreated;
         KEY_HASHMAP = LEXER.getNameDB(QUERY_CREATE_BD);
         if (KEY_HASHMAP!=null) {
@@ -40,6 +42,7 @@ public class Queries {
             }else{
                 DATABASES.put(KEY_HASHMAP, TABLE);
                 isCreated=true;
+                CL.createDB(KEY_HASHMAP);
             }
         }else{
             System.out.println("ERROR: DATABASE CAN'T BE NULL");
@@ -87,7 +90,7 @@ public class Queries {
     
     /*---------------------- QUERIES OF TABLES -------------------------*/
     
-    public ArrayList<String> CREATE_TABLE(String QUERY_CREATE_TB){
+    public ArrayList<String> CREATE_TABLE(String QUERY_CREATE_TB) throws Exception{
         System.out.println("CREATE TABLE INSIDE "+TABLE.getNAME_DATABASE());
         String KEY_HASHMAP_TB="";
         KEY_HASHMAP_TB = LEXER.getNameTable(QUERY_CREATE_TB);
@@ -102,19 +105,7 @@ public class Queries {
                 TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
             
             ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
-            
-            /*creando la clase (tabla)*/
-            String str = classBuilder(dt);
-            JavaFileObject file = getJavaFileObject(str,dt.get(0));
-            Iterable<? extends JavaFileObject> files = Arrays.asList(file);
-
-            //Compilando archivo
-            compile(files);
-
-            //corre la clase (en progreso)
-            //runIt(dt.get(0));
-
-            
+            CL.createTable(dt);
             return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
         }else{
             System.out.println("ERROR: TABLE CAN'T BE NULL");
