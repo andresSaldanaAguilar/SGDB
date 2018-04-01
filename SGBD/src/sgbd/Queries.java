@@ -65,9 +65,25 @@ public class Queries {
       System.out.println("+------------------------+\n");
     }
     
-    public void DROP_DATABASE(String NAME_BD) throws Exception{  /*DROP A SPECIFIC DATABASE*/
-        DATABASES.remove(NAME_BD);
-        CL.dropDB(NAME_BD);
+    public boolean DROP_DATABASE(String QUERY_DROP_BD) throws Exception{  /*DROP A SPECIFIC DATABASE*/
+        boolean isCreated;
+        KEY_HASHMAP = LEXER.getNameDB(QUERY_DROP_BD);
+        System.out.println("key_HashDROP: "+KEY_HASHMAP);
+        if (KEY_HASHMAP != null) {
+            if (!DATABASES.containsKey(KEY_HASHMAP)) {
+                System.out.println("Can't drop database '"+KEY_HASHMAP+"'");
+                System.out.println("Database doesn't exist");
+                isCreated = false;
+            } else {
+                DATABASES.remove(KEY_HASHMAP);
+                CL.dropDB(KEY_HASHMAP);
+                isCreated = true;
+            }
+        } else {
+            System.out.println("ERROR: DATABASE CAN'T BE NULL");
+            isCreated = false;
+        }
+        return isCreated;
     }
     
     /*public HashMap USE_DATABASE(String NAME_BD){

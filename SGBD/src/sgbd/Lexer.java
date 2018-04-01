@@ -18,7 +18,8 @@ public class Lexer {
     private final String[] CREATE_BD = {"CREATE DATABASE ", "create database "};
     private final String[] CREATE_TB = {"CREATE TABLE ", "create table "};
     private final String[] USE_BD = {"USE DATABASE ", "use database "};
-
+    private final String[] DROP_BD = {"DROP DATABASE ","drop database "};
+    
     public String getNameDB(String SQL_QUERY) {
         String name_BD = "";
         String segment[];
@@ -37,7 +38,21 @@ public class Lexer {
                 StringTokenizer token = new StringTokenizer(name_BD, ";");
                 name_BD = token.nextToken();
             }
-        } else {
+        } else if (SQL_QUERY.contains(DROP_BD[0])) {
+            segment = SQL_QUERY.split(DROP_BD[0]);
+            name_BD = segment[1];
+            if (name_BD.contains(";")) {
+                StringTokenizer token = new StringTokenizer(name_BD, ";");
+                name_BD = token.nextToken();
+            }
+        } else if (SQL_QUERY.contains(DROP_BD[1])) {
+            segment = SQL_QUERY.split(DROP_BD[1]);
+            name_BD = segment[1];
+            if (name_BD.contains(";")) {
+                StringTokenizer token = new StringTokenizer(name_BD, ";");
+                name_BD = token.nextToken();
+            }
+        }else {
             System.out.println("Syntaxis error");
             name_BD = null;
         }
