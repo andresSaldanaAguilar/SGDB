@@ -18,12 +18,34 @@ public class Client {
         dOut.close();
     }
     
+    //request to create DB
+    void dropDB(String name) throws Exception{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send first the action
+        dOut.writeByte(5);
+        dOut.writeUTF(name);
+        dOut.flush(); 
+        dOut.close();
+    }
+    
     void createTable(ArrayList<String> al) throws Exception{
         Socket socket = new Socket("localhost",3000);
         ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
         // Send the action
         dOut.writeByte(2);
         dOut.writeObject(al);
+        dOut.flush(); 
+        dOut.close();
+    }
+    
+    //request to create DB
+    void dropTable(String name) throws Exception{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send first the action
+        dOut.writeByte(6);
+        dOut.writeUTF(name);
         dOut.flush(); 
         dOut.close();
     }

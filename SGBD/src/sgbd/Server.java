@@ -27,6 +27,7 @@ public class Server {
             Socket socket = listener.accept();
             System.out.println("Client connection");
             ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+            String name ="";
             //ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
             /*files config*/
             
@@ -43,7 +44,7 @@ public class Server {
                 {
                 //case create database
                 case 1:
-                    String name = dIn.readUTF();
+                    name = dIn.readUTF();
                     fm.CreateDB(name);
                     break;
                 //case create table
@@ -78,6 +79,15 @@ public class Server {
                     dout1.flush();
                     System.out.println("Data Sended");
                     break;
+                case 5:
+                    name = dIn.readUTF();
+                    fm.deleteDB(name);
+                    break;
+                case 6:
+                    name = dIn.readUTF();
+                    fm.deleteTable(name);
+                    break;                    
+                    
                 default:
                     done = true;
                 }

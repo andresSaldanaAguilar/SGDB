@@ -65,8 +65,9 @@ public class Queries {
       System.out.println("+------------------------+\n");
     }
     
-    public void DROP_DATABASE(String NAME_BD){  /*DROP A SPECIFIC DATABASE*/
+    public void DROP_DATABASE(String NAME_BD) throws Exception{  /*DROP A SPECIFIC DATABASE*/
         DATABASES.remove(NAME_BD);
+        CL.dropDB(NAME_BD);
     }
     
     /*public HashMap USE_DATABASE(String NAME_BD){

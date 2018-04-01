@@ -179,6 +179,7 @@ public class DynamicCompiler
         }
     }
     
+    /*creates the specified class on a string*/
     public static String classBuilder(ArrayList<String> genclass){
         String stringb= "/*package math;*/ public class "+genclass.get(0)+" {";
         //concatenate the attributes
@@ -204,6 +205,7 @@ public class DynamicCompiler
         System.out.println(stringb);
         return stringb;
     }
+    
  
     public static void main(String[] args) throws Exception
     {

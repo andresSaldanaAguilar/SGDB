@@ -119,18 +119,47 @@ public class FileManager {
         else 
             return null;
         
-    }    
+    } 
+    
+    boolean deleteDB(String dbname){
+        File file = new File("./DB/"+dbname);
+        if (file.exists()) {
+            //deleting db
+            file.delete();
+            //deleting classes
+            File folder = new File("./build/classes/");
+            File[] files = folder.listFiles();
+            for(File namefile:files){
+                if(namefile.getName().contains(dbname)){
+                    namefile.delete();
+                }
+            }
+            return true;
+        }
+        else return false; 
+    }
+    
+    boolean deleteTable(String tablename){
+        File folder = new File("./build/classes/");
+        File[] files = folder.listFiles();
+        for(File namefile:files){
+            if(namefile.getName().equals(tablename+".class")){
+                namefile.delete();
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
     /*future work: registers*/
  
-    /*public static void main(String args[]){
+    public static void main(String args[]){
         
         FileManager r= new FileManager();
-        r.CreateDB("newDBB");
-        r.CreateTable("newDBB", "xilomat",new String[]{"int nombre","varchar apellido","varchar localidad"});
-        r.getDBs();
-        r.getTables("newDBB");
-        r.getColumns("newDBB", "Axilomat");    
-    }*/
+        boolean res = r.deleteTable("nada");
+        System.out.println(res);
+        
+    }
 
 }
