@@ -1,6 +1,7 @@
 package sgbd;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,16 +31,16 @@ public class FileManager {
     }
     
     //provides all database names
-    String[] getDBs(){
+    ArrayList<String> getDBs(){
         File folder = new File("./DB");
         File[] listOfFiles = folder.listFiles();
-        String[] listOfDirNames = new String[listOfFiles.length];
+        ArrayList<String> listOfDirNames = new ArrayList();
         for (int i = 0; i < listOfFiles.length; i++){
             //this ignores the stored data folder on macOS
-            if(listOfFiles[i].getName().equals(".DS_Store")){
+            if(listOfFiles[i].getName().equals(".DS_Store") || listOfFiles[i].getName().equals(".gitignore")){
                 continue;
-            }
-            listOfDirNames[i] = listOfFiles[i].getName();
+            }           
+            listOfDirNames.add(listOfFiles[i].getName());
         }
         return listOfDirNames;
     }
@@ -75,21 +76,15 @@ public class FileManager {
     }
     
     //provides all database names
-    String[] getTables(String database){
-        File folder = new File("./DB/"+database);
+    ArrayList<String> getTables(String database){
+        File folder = new File("./build/classes/");
         File[] listOfFiles = folder.listFiles();
-        String[] list = new String[listOfFiles.length];
+        ArrayList<String> list = new ArrayList();
         for (int i = 0; i < listOfFiles.length; i++){
             //this ignores the stored data folder on macOS
-            if(listOfFiles[i].getName().equals(".DS_Store")){
-                continue;
+            if(listOfFiles[i].getName().contains(database)){
+                list.add(listOfFiles[i].getName());
             }
-            //if is not a table, we're not going to add them
-            else if(listOfFiles[i].getName().charAt(0) != 'A'){
-                continue;
-            }
-            else
-            list[i] = listOfFiles[i].getName().replaceAll(".txt", "");
         }
         return list;
     }

@@ -2,6 +2,7 @@
 
 import sgbd.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,16 +32,16 @@ public class FileManager {
     }
     
     //provides all database names
-    String[] getDBs(){
+    ArrayList<String> getDBs(){
         File folder = new File("./DB");
         File[] listOfFiles = folder.listFiles();
-        String[] listOfDirNames = new String[listOfFiles.length];
+        ArrayList<String> listOfDirNames = new ArrayList();
         for (int i = 0; i < listOfFiles.length; i++){
             //this ignores the stored data folder on macOS
             if(listOfFiles[i].getName().equals(".DS_Store")){
                 continue;
-            }
-            listOfDirNames[i] = listOfFiles[i].getName();
+            }           
+            listOfDirNames.add(listOfFiles[i].getName());
         }
         return listOfDirNames;
     }

@@ -21,12 +21,14 @@ public class Server {
             /*server config*/
             ServerSocket listener = new ServerSocket(3000);
             System.out.println("Server Running");
+            FileManager fm = new FileManager();
+            
             while(true){
             Socket socket = listener.accept();
             System.out.println("Client connection");
             ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
             /*files config*/
-            FileManager fm = new FileManager();
             
             boolean done = false;
             while(!done){
@@ -59,10 +61,22 @@ public class Server {
                     //corre la clase (en progreso)
                     //runIt(dt.get(0));
                     break;
-                //example for strings
+                //sending databases
                 case 3:
-                    System.out.println("Message C [1]: " + dIn.readUTF());
-                    System.out.println("Message C [2]: " + dIn.readUTF());
+                    ArrayList<String> databases = fm.getDBs();
+                    dout.writeObject(databases);
+                    dout.flush();
+                    dout.close();
+                    System.out.println("Data Sended");
+                    break;
+                 //example the selected tables
+                case 4:
+                    String dbname = dIn.readUTF();
+                    ArrayList<String> tables = fm.getTables(dbname);
+                    dout.writeObject(tables);
+                    dout.flush();
+                    dout.close();
+                    System.out.println("Data Sended");
                     break;
                 default:
                     done = true;
@@ -70,8 +84,6 @@ public class Server {
             
             }
             dIn.close();
-            }
-
-
-	}
+        }
+    }
 }

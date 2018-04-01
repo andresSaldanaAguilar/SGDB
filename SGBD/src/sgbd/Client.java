@@ -25,40 +25,52 @@ public class Client {
         dOut.writeByte(2);
         dOut.writeObject(al);
         dOut.flush(); 
-        //dOut.close();
+        dOut.close();
     }
     
+    //gets all the databases
+    ArrayList<String> getDBs() throws Exception{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(3);
+        dOut.flush();
+        //get de dbs
+        ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+        ArrayList<String> databases = (ArrayList<String>) dIn.readObject();
+        
+        dIn.close();
+        dOut.close();
+        return databases; 
+    }
     
-    /*public static void main(String[] args)throws Exception{
-            Socket socket = new Socket("localhost",3000);
-            ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
-
-            // Send first message
-            dOut.writeByte(1);
-            dOut.writeUTF("This is the first type of message.");
-            dOut.flush(); // Send off the data
-
-            // Send the second message
-            dOut.writeByte(2);
-            Objeto obj = new Objeto(5,4);
-            dOut.writeObject(obj);
-            dOut.flush(); // Send off the data
-
-            // Send the third message
-            dOut.writeByte(3);
-            dOut.writeUTF("This is the third type of message (Part 1).");
-            dOut.writeUTF("This is the third type of message (Part 2).");
-            dOut.flush(); // Send off the data
-
-            // Send the exit message
-            dOut.writeByte(-1);
-            dOut.flush();
-
-            dOut.close();
-    }*/
+    //gets all the tables from a specified db
+    ArrayList<String> getTables(String database) throws Exception{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(4);
+        //send de database name
+        dOut.writeUTF(database);
+        dOut.flush();
+        //get the tables
+        ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+        ArrayList<String> tables = (ArrayList<String>) dIn.readObject();
+        
+        dIn.close();
+        dOut.close();
+        return tables; 
+    }
     
-    /*public static void main(String[] args)throws Exception{
+    //get all the tables from all the existing dbs
+    
+
+    
+    public static void main(String[] args)throws Exception{
         Client c= new Client();
-        c.createDB("uno");
-    }*/
+        ArrayList<String> dbs = c.getTables("db");
+        for(String db: dbs){
+            System.out.println(db);
+        }
+    }
 }
