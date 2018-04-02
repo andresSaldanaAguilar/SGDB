@@ -83,7 +83,8 @@ public class FileManager {
         for (int i = 0; i < listOfFiles.length; i++){
             //this ignores the stored data folder on macOS
             if(listOfFiles[i].getName().contains(database)){
-                list.add(listOfFiles[i].getName());
+                String [] justname = listOfFiles[i].getName().split("\\.");
+                list.add(justname[0]);
             }
         }
         return list;
@@ -154,12 +155,11 @@ public class FileManager {
     
     /*future work: registers*/
  
-    public static void main(String args[]){
+    /*public static void main(String args[]){
         
         FileManager r= new FileManager();
-        boolean res = r.deleteTable("nada");
-        System.out.println(res);
+        r.getTables("dos");
         
-    }
+    }*/
 
 }
