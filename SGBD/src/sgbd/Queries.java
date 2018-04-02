@@ -149,4 +149,36 @@ public class Queries {
         System.out.println("+------------------------+\n");
     }
     /*------------------------------------------------------------------*/
+    
+    
+    /*------------------------ROOT------------------------*/
+    public void fill_DataBases(String SQL_QUERY_ROOT){
+        ArrayList<String> old_databases;
+        try {
+            old_databases = CL.getDBs();
+            for (int i = 0; i < old_databases.size(); i++) 
+                CREATE_DB("CREATE DATABASE "+old_databases.get(i));
+            
+            for (int i = 0; i < old_databases.size(); i++) {
+                fill_Tables_ByDB(old_databases.get(i));
+            }
+            
+            SHOW_DATABASES();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void fill_Tables_ByDB(String name_BD){
+        ArrayList<String> old_Tables;
+        try {
+            old_Tables = CL.getTables(name_BD);
+            for (int i = 0; i < old_Tables.size(); i++) {
+                System.out.println(old_Tables.get(i));
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    /*----------------------------------------------------*/
 }
