@@ -183,29 +183,29 @@ public class Lexer {
             } else if (listOfData.get(i).contains("VARCHAR")) {
                 flag = listOfData.get(i).replace("VARCHAR", "String");
             } else if (listOfData.get(i).contains("FLOAT")) {           /*Verifica FLOAT/float*/
-                flag = listOfData.get(i).replace("FLOAT", "float");
+                flag = listOfData.get(i).replace("FLOAT", "Float");
             } else if (listOfData.get(i).contains("float")) {
-                flag = listOfData.get(i).replace("float", "float");
+                flag = listOfData.get(i).replace("float", "Float");
             } else if (listOfData.get(i).contains("INT")) {             /*Verifica INT/int*/
-                flag = listOfData.get(i).replace("INT", "int");
+                flag = listOfData.get(i).replace("INT", "Integer");
             } else if (listOfData.get(i).contains("int")) {
-                flag = listOfData.get(i).replace("int", "int");
+                flag = listOfData.get(i).replace("int", "Integer");
             } else if (listOfData.get(i).contains("SHORT")) {            /*Verifica SHORT/short*/
-                flag = listOfData.get(i).replace("SHORT", "short");
+                flag = listOfData.get(i).replace("SHORT", "Short");
             } else if (listOfData.get(i).contains("short")) {
-                flag = listOfData.get(i).replace("short", "short");
+                flag = listOfData.get(i).replace("short", "Short");
             } else if (listOfData.get(i).contains("LONG")) {             /*Verifica LONG/long*/
-                flag = listOfData.get(i).replace("LONG", "long");
+                flag = listOfData.get(i).replace("LONG", "Long");
             } else if (listOfData.get(i).contains("long")) {            
-                flag = listOfData.get(i).replace("long", "long");
+                flag = listOfData.get(i).replace("long", "Long");
             } else if (listOfData.get(i).contains("DOUBLE")) {          /*Verifica DOUBLE/double*/
-                flag = listOfData.get(i).replace("DOUBLE", "double");
+                flag = listOfData.get(i).replace("DOUBLE", "Double");
             } else if (listOfData.get(i).contains("double")) {
-                flag = listOfData.get(i).replace("double", "double");
+                flag = listOfData.get(i).replace("double", "Double");
             } else if (listOfData.get(i).contains("BOOL")) {            /*Verifica BOOL/bool*/
-                flag = listOfData.get(i).replace("BOOL", "boolean");
+                flag = listOfData.get(i).replace("BOOL", "Boolean");
             } else if (listOfData.get(i).contains("bool")) {
-                flag = listOfData.get(i).replace("bool", "boolean");
+                flag = listOfData.get(i).replace("bool", "Boolean");
             }
             listOfData.set(i, flag);
             flag = "";
