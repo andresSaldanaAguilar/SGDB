@@ -108,23 +108,30 @@ public class Queries {
     /*---------------------- QUERIES OF TABLES -------------------------*/
     
     public ArrayList<String> CREATE_TABLE(String QUERY_CREATE_TB) throws Exception{
-        System.out.println("CREATE TABLE INSIDE "+TABLE.getNAME_DATABASE());
+//        System.out.println("CREATE TABLE INSIDE "+TABLE.getNAME_DATABASE());
         String KEY_HASHMAP_TB="";
         KEY_HASHMAP_TB = LEXER.getNameTable(QUERY_CREATE_TB);
-        System.out.println("KEY_HASHMAP_TB"+KEY_HASHMAP_TB);
+//        System.out.println("KEY_HASHMAP_TB"+KEY_HASHMAP_TB);
         
         TABLE.setKEY_HASHMAP_TABLE( KEY_HASHMAP_TB );
         if (TABLE.getKEY_HASHMAP_TABLE()!=null) {
-            if (TABLE.containsKey(TABLE.getKEY_HASHMAP_TABLE()))
-                System.out.println("Table "+TABLE.getKEY_HASHMAP_TABLE()
+            try {
+                if (TABLE.containsKey(TABLE.getKEY_HASHMAP_TABLE())){
+                    System.out.println("Table "+TABLE.getKEY_HASHMAP_TABLE()
                                        +" already exists inside "+TABLE.getNAME_DATABASE());
-            else
-                TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
-            
-            ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
-            dt.set(0, TABLE.getNAME_DATABASE()+"_"+dt.get(0));
-            CL.createTable(dt);
-            return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
+                    return null;
+                }else{
+                    TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
+                    System.out.println("Table '"+TABLE.getKEY_HASHMAP_TABLE()+"' created");
+                    ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
+                    dt.set(0, TABLE.getNAME_DATABASE()+"_"+dt.get(0));
+                    CL.createTable(dt);
+                    return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
+                }
+            } catch (Exception e) {
+                System.out.println("No database selected");
+                return null;
+            }
         }else{
             System.out.println("ERROR: TABLE CAN'T BE NULL");
             return null;
@@ -158,9 +165,9 @@ public class Queries {
             old_databases = CL.getDBs();
             for (int i = 0; i < old_databases.size(); i++) {
                 if (old_databases.get(i)!=null) {
-                    System.out.println(">>"+old_databases.get(i));
+//                    System.out.println(">>"+old_databases.get(i));
                     CREATE_DB("CREATE DATABASE "+old_databases.get(i));
-                    //fill_Tables_ByDB(old_databases.get(i));
+                    fill_Tables_ByDB(old_databases.get(i));
                 }
             }
             SHOW_DATABASES();
@@ -174,14 +181,12 @@ public class Queries {
         try {
             old_Tables = CL.getTables(name_BD);
             for (int i = 0; i < old_Tables.size(); i++) {
-                if (old_Tables.get(i).contains(name_BD)&& 
-                    old_Tables.get(i)!=null) {
-                    USE_DATABASE(name_BD);
-                    System.out.println("->"+old_Tables.get(i));
+                if (old_Tables.get(i).contains(name_BD)) {
+                    USE_DATABASE("USE DATABASE "+name_BD);
+                    CREATE_TABLE("CREATE TABLE "+old_Tables.get(i));
+                    System.out.println(">>"+old_Tables.get(i));
+                    System.out.println("________");
                 }
-                SHOW_TABLES();
-                System.out.println("________");
-                
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
