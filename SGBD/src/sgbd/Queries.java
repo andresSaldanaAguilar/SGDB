@@ -122,7 +122,7 @@ public class Queries {
                 TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
             
             ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
-            dt.set(0, TABLE.getNAME_DATABASE()+dt.get(0));
+            dt.set(0, TABLE.getNAME_DATABASE()+"_"+dt.get(0));
             CL.createTable(dt);
             return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
         }else{
