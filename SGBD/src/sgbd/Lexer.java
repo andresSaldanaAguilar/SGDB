@@ -9,12 +9,13 @@ import java.util.StringTokenizer;
 public class Lexer {
 
     private static final short LENGTH_BOOLEAN = 7;
+    private static final short LENGTH_INTEGER = 7;
     private static final short LENGTH_STRING = 6;
     private static final short LENGTH_DOUBLE = 6;
     private static final short LENGTH_SHORT = 5;
     private static final short LENGTH_FLOAT = 5;
     private static final short LENGTH_LONG = 4;
-    private static final short LENGTH_INT = 3;
+    
     private final String[] CREATE_BD = {"CREATE DATABASE ", "create database "};
     private final String[] CREATE_TB = {"CREATE TABLE ", "create table "};
     private final String[] USE_BD = {"USE DATABASE ", "use database "};
@@ -212,7 +213,7 @@ public class Lexer {
         }
         return listOfData;
     }
-
+    
     private static ArrayList<String> correctFormat(ArrayList<String> listOfData) {
         String TypeDataPrim = "";
         String NameDataPrim = "";
@@ -222,8 +223,8 @@ public class Lexer {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_STRING);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_STRING);
             } else if (listOfData.get(i).contains("int")) {
-                TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_INT);
-                NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_INT);
+                TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_INTEGER);
+                NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_INTEGER);
             } else if (listOfData.get(i).contains("short")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_SHORT);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_SHORT);
