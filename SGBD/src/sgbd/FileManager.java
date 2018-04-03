@@ -73,7 +73,7 @@ public class FileManager {
                     cols += arraux[0]+" "+arraux[1]+"_";
                 }
             }
-            writer.write(cols);
+            writer.write(cols+"\n");
             
         } catch (Exception e) {
             e.printStackTrace();
