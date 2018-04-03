@@ -156,13 +156,13 @@ public class Queries {
         System.out.println("+------------------------+\n");
     }
     
-    public void INSERT_INTO(String QUERY_INSERT){
+    public String INSERT_INTO(String QUERY_INSERT){
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
         String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
         
         System.out.println("->"+sentence);       
-        //return sentence;
+        return sentence;
     }
     /*------------------------------------------------------------------*/
     
