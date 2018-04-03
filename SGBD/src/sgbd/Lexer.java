@@ -299,7 +299,7 @@ public class Lexer {
         return values;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String sql = "CREATE TABLE UNO(uno INT, name VARCHAR(20), desc varchar(10), nosequeponer varchar(5), precio FLOAT);";
         System.out.println(sql);
         new Lexer().getDataTable(sql);
@@ -307,5 +307,5 @@ public class Lexer {
         String SQL = "CREATE TABLE A_UNO( nombre varchar(20), edad int, apellido varchar(10),precio FLOAT);";
         System.out.println(SQL);
         new Lexer().getDataTable(SQL);
-    }
+    }*/
 }
