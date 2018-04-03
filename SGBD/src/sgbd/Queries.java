@@ -2,6 +2,7 @@ package sgbd;
 
 /*@author kaimorts*/
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -155,11 +156,11 @@ public class Queries {
         System.out.println("+------------------------+\n");
     }
     
-    public String INSERT_INTO(String QUERY_INSERT){
+    public String INSERT_INTO(String QUERY_INSERT) throws IOException, ClassNotFoundException{
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
-        String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
-        
+        String sentence = TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
+        CL.getRegisters(sentence);
         System.out.println("->"+sentence);       
         return sentence;
     }

@@ -282,15 +282,20 @@ public class Lexer {
         segment = null;
         if (sentence!=null) {
             if (sentence.contains("values")) {
-                System.out.println("Sentence: "+sentence);
+                //System.out.println("Sentence: "+sentence);
                 segment = sentence.split(TABLE+" values");
             }else if(sentence.contains("VALUES")){
-                System.out.println("Sentence: "+sentence);
+                //System.out.println("Sentence: "+sentence);
                 segment = sentence.split(TABLE+" VALUES");
             }
             sentence = "";
             sentence= segment[1];
-            System.out.println("sentence2: "+sentence);
+            //System.out.println("sentence2: "+sentence);
+            segment = null;
+            segment = sentence.split("\\(|\\)");
+            sentence = "";
+            sentence = segment[1];
+            //System.out.println("sentence3:"+sentence);
             values = sentence;
         }else{
             System.out.println("Error. Registers didn't create");
@@ -299,7 +304,7 @@ public class Lexer {
         return values;
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         String sql = "CREATE TABLE UNO(uno INT, name VARCHAR(20), desc varchar(10), nosequeponer varchar(5), precio FLOAT);";
         System.out.println(sql);
         new Lexer().getDataTable(sql);
@@ -307,5 +312,8 @@ public class Lexer {
         String SQL = "CREATE TABLE A_UNO( nombre varchar(20), edad int, apellido varchar(10),precio FLOAT);";
         System.out.println(SQL);
         new Lexer().getDataTable(SQL);
-    }*/
+        /*String slx = "INSERT INTO UNO(10,12);";
+        new Lexer().getRegisters(SQL, "UNO");*/
+        
+    }
 }
