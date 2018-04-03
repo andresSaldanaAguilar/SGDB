@@ -160,8 +160,8 @@ public class Queries {
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
         String sentence = TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
-        CL.getRegisters(sentence);
-        System.out.println("->"+sentence);       
+        System.out.println("->"+sentence);   
+        CL.createRegister(sentence);    
         return sentence;
     }
     /*------------------------------------------------------------------*/
