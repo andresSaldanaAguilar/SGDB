@@ -187,6 +187,7 @@ public class Queries {
     
     public void fill_Tables_ByDB(String name_BD){
         ArrayList<String> old_Tables;
+        String TB="";
         try {
             old_Tables = CL.getTables(name_BD);
             for (int i = 0; i < old_Tables.size(); i++) {
@@ -194,11 +195,25 @@ public class Queries {
                     USE_DATABASE("USE DATABASE "+name_BD);
                     CREATE_TABLE("CREATE TABLE "+old_Tables.get(i));
                     System.out.println(">>"+old_Tables.get(i));
+                    TB = old_Tables.get(i);
+                    fill_Register_ByTB(TB);
                     System.out.println("________");
                 }
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        }
+    }
+    
+    public void fill_Register_ByTB(String NAME_TB){
+        ArrayList<Object> old_Register;
+        try {
+            old_Register = CL.getRegisters(NAME_TB);
+            for (int i = 0; i < old_Register.size(); i++) {
+                System.out.println("**"+old_Register.get(i));
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println(""+e.getMessage());
         }
     }
     /*----------------------------------------------------*/
