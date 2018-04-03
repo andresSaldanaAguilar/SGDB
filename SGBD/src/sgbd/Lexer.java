@@ -283,10 +283,10 @@ public class Lexer {
         if (sentence!=null) {
             if (sentence.contains("values")) {
                 //System.out.println("Sentence: "+sentence);
-                segment = sentence.split(BD+"_"+TABLE+" values");
+                segment = sentence.split(BD.toLowerCase()+"_"+TABLE.toLowerCase()+" values");
             }else if(sentence.contains("VALUES")){
                 //System.out.println("Sentence: "+sentence);
-                segment = sentence.split(TABLE+" VALUES");
+                segment = sentence.split(BD+"_"+"_"+TABLE+" VALUES");
             }
             sentence = "";
             sentence= segment[1];

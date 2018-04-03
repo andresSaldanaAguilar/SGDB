@@ -145,7 +145,7 @@ public class FileManager {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {
-            out.print("\n"+newvalues);
+            out.print("\r\n"+newvalues);
             //more code
         } catch (IOException e) {
             //exception handling left as an exercise for the reader
