@@ -61,6 +61,9 @@ public class SGBD {
                         }
                     }
                 }
+                if (query.contains("INSERT INTO")||query.contains("insert into")) {
+                    dc.INSERT_INTO(query);
+                }
             } while (continua);
         } else {
             System.exit(0);

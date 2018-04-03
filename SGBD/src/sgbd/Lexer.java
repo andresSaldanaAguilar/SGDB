@@ -20,6 +20,7 @@ public class Lexer {
     private final String[] CREATE_TB = {"CREATE TABLE ", "create table "};
     private final String[] USE_BD = {"USE DATABASE ", "use database "};
     private final String[] DROP_BD = {"DROP DATABASE ","drop database "};
+    private final String[] INSERT_TB = {"INSERT INTO ","insert into "};
     
     public String getNameDB(String SQL_QUERY) {
         String name_BD = "";
@@ -78,7 +79,21 @@ public class Lexer {
                 StringTokenizer token = new StringTokenizer(name_Table, "(");
                 name_Table = token.nextToken();
             }
-        } else {
+        } else if (SQL_QUERY.contains(INSERT_TB[1])) {
+            segment = SQL_QUERY.split(INSERT_TB[1]);
+            name_Table = segment[1];
+            if (name_Table.contains("VALUES")) {
+                StringTokenizer token = new StringTokenizer(name_Table, "VALUES");
+                name_Table = token.nextToken();
+            }
+        }else if (SQL_QUERY.contains(INSERT_TB[0])) {
+            segment = SQL_QUERY.split(INSERT_TB[0]);
+            name_Table = segment[1];
+            if (name_Table.contains("VALUES")) {
+                StringTokenizer token = new StringTokenizer(name_Table, "VALUES");
+                name_Table = token.nextToken();
+            }
+        }else {
             System.out.println("Syntaxis error");
             name_Table = null;
         }
@@ -246,6 +261,42 @@ public class Lexer {
             NameDataPrim = "";
         }
         return listOfData;
+    }
+    
+    public String getRegisters(String SQL_QUERY,String TABLE){
+        String[] segment; 
+        String values ="",sentence="";
+        
+        /*QUITA LA SENTENCIA GENERADORA DE TABLA: 'CREATE TABLE'*/
+        if (SQL_QUERY.contains(INSERT_TB[0])) {
+            segment = SQL_QUERY.split(INSERT_TB[0]);
+            sentence = segment[1];
+        } else if (SQL_QUERY.contains(INSERT_TB[1])) {
+            segment = SQL_QUERY.split(INSERT_TB[1]);
+            sentence = segment[1];
+        } else {
+            System.out.println("Syntaxis error");
+            sentence = null;
+        }
+        /*-----------------------------------------------------*/
+        segment = null;
+        if (sentence!=null) {
+            if (sentence.contains("values")) {
+                System.out.println("Sentence: "+sentence);
+                segment = sentence.split(TABLE+" values");
+            }else if(sentence.contains("VALUES")){
+                System.out.println("Sentence: "+sentence);
+                segment = sentence.split(TABLE+" VALUES");
+            }
+            sentence = "";
+            sentence= segment[1];
+            System.out.println("sentence2: "+sentence);
+            values = sentence;
+        }else{
+            System.out.println("Error. Registers didn't create");
+            values=null;
+        }
+        return values;
     }
 
     /*public static void main(String[] args) {

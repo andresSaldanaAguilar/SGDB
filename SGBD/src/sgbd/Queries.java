@@ -91,7 +91,7 @@ public class Queries {
     }*/
     
     public void USE_DATABASE(String QUERY_USE){
-        TABLE = new Table();
+        //TABLE = new Table();
         String MATCH_BD = "";
         MATCH_BD = LEXER.getBD_ToUse(QUERY_USE);
         TABLE.setNAME_DATABASE(MATCH_BD);
@@ -154,6 +154,15 @@ public class Queries {
             System.out.println("|"+ mentry.getKey());
         }
         System.out.println("+------------------------+\n");
+    }
+    
+    public void INSERT_INTO(String QUERY_INSERT){
+        String BD=TABLE.getNAME_DATABASE();
+        String TB=TABLE.getKEY_HASHMAP_TABLE();
+        String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
+        
+        System.out.println("->"+sentence);       
+        //return sentence;
     }
     /*------------------------------------------------------------------*/
     
