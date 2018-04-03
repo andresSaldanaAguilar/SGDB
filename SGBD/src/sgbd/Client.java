@@ -84,6 +84,33 @@ public class Client {
         return tables; 
     }
     
+    void createRegister(String reg) throws IOException{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(7);
+        dOut.writeUTF(reg);
+        dOut.flush(); 
+        dOut.close();            
+    }
+    
+    ArrayList<Object> getRegisters(String table) throws IOException, ClassNotFoundException{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(8);
+        dOut.writeUTF(table);
+        dOut.flush(); 
+        dOut.close();
+        //get the objects
+        ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+        ArrayList<Object> objects = (ArrayList<Object>) dIn.readObject();
+        
+        dIn.close();
+        dOut.close();
+        return objects; 
+    }
+    
     //get all the tables from all the existing dbs
     
 

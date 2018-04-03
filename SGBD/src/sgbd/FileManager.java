@@ -46,20 +46,34 @@ public class FileManager {
     }
     
     //creates the table archive
-    boolean CreateTable(String database,String name,String[] columns){              
+    boolean CreateTable(ArrayList<String> al){              
         //this file is just for validation terms
-        File provfile = new File("./DB/"+database+"/"+name+".txt");
+        String[] arr = al.get(0).split("_");
+        String table = arr[1];
+        String database = arr[0];         
+        File provfile = new File("./DB/"+database+"/"+table+".txt");
         if(!provfile.exists()){
 
         BufferedWriter writer = null;
         try {
-            //important: the A letter tell us that is a table, not a register
-            File file = new File("./DB/"+database+"/"+"A"+name+".txt");
-
+            //creating containing file
+            File file = new File("./DB/"+database+"/"+table+".txt");
+            file.getParentFile().mkdirs(); 
+            file.createNewFile();
             writer = new BufferedWriter(new FileWriter(file));
-            for(int i = 0; i<columns.length; i++){
-                writer.write(columns[i]+"\n");
+            //saving the cols on the archive
+            String cols = "";
+            for(int i = 1; i<al.size(); i++){
+                String [] arraux = al.get(i).split(" ");
+                
+                if(i == al.size()-1){
+                    cols += arraux[0]+" "+arraux[1];
+                }
+                else{
+                    cols += arraux[0]+" "+arraux[1]+"_";
+                }
             }
+            writer.write(cols);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,38 +103,6 @@ public class FileManager {
         }
         return list;
     }
-    
-    //provides all database names
-    String[] getColumns(String database,String table){
-        
-        if(table.charAt(0) == 'A'){
-
-            BufferedReader br = null;
-            String sCurrentLine;
-            LinkedList<String> cols= new LinkedList();
-            
-            try {            
-            br = new BufferedReader(new FileReader("./DB/"+database+"/"+table+".txt"));
-            while ((sCurrentLine = br.readLine()) != null) {
-                String[] arr = sCurrentLine.split("/n");
-                //for the first line it'll print
-                for(int i= 0; i < arr.length; i++){
-                    cols.add(arr[i]); 
-                }
-            }
-            } catch (Exception ex) {            
-                Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            String[] columns = new String[cols.size()];
-            for(int i= 0; i< cols.size(); i++){
-                columns[i] = cols.get(i);
-            }
-            return columns;
-        }
-        else 
-            return null;
-        
-    } 
     
     boolean deleteDB(String dbname){
         File file = new File("./DB/"+dbname);
@@ -152,14 +134,57 @@ public class FileManager {
         return false;
     }
     
+    boolean createRegister(String reg){
+        String arr[] = reg.split("_");
+        String dbname = arr[0];
+        String tbname = arr[1];
+        String values = arr[2];
+        String newvalues = values.replace(",", "_");
+        
+        try(FileWriter fw = new FileWriter("./DB/"+dbname+"/"+tbname+".txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.print("\n"+newvalues);
+            //more code
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
+        return false;
+    }
     
-    /*future work: registers*/
+    ArrayList<String> showRegisters(String dbname,String tbname){
+        
+    ArrayList<String> list = new ArrayList();    
+    try (BufferedReader br = new BufferedReader(new FileReader("./DB/"+dbname+"/"+tbname+".txt"))) {
+
+        String currentLine;
+        while ((currentLine = br.readLine()) != null) {
+            list.add(currentLine);
+        }
+            
+    } catch (IOException e) {
+            e.printStackTrace();
+    }
+
+        return list;
+    }
+
+    
  
-    /*public static void main(String args[]){
+    public static void main(String args[]){
         
         FileManager r= new FileManager();
-        r.getTables("dos");
+        /*ArrayList<String> al = new ArrayList();
+        al.add("BD_tabla");
+        al.add("nombre String");
+        al.add("edad Integer");
+        al.add("peso Integer");
+        r.CreateTable(al);*/
+        //r.createRegister("BD_tabla_andres,12,64");
+
+        ArrayList<String> list = r.showRegisters("BD","tabla");
         
-    }*/
+    }
 
 }

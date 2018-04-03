@@ -71,11 +71,10 @@ public class Servidor_O
         StringBuilder contents = new StringBuilder(
         "/*package math;*/"
         +"public class nada{"
-        +"public int uno;"
-        +"public int dos;"
-        +"public int getUno(){"
+        +"public Integer uno;"
+        +"public Integer getUno(){"
         +"return this.uno;}"
-        +"public void setUno(int uno){"
+        +"public void setUno(Integer uno){"
         +"this.uno=uno;}"
         + "}");
         
@@ -154,14 +153,14 @@ public class Servidor_O
         Method [] m = tabla.getClass().getMethods();
         System.out.println(m[1].getName());
         System.out.println(m[0].getName());
-        Method setNameMethod = tabla.getClass().getMethod(m[1].getName(), String.class);
+        Method setNameMethod = tabla.getClass().getMethod(m[1].getName(), Integer.class);
         setNameMethod.invoke(tabla, 1); // pass arg
 
 
         // without parameters, return string
         //methodName = "getUno";
         Method getNameMethod = tabla.getClass().getMethod(m[0].getName());
-        String name = (String) getNameMethod.invoke(tabla); // explicit cast
+        Integer name = (Integer) getNameMethod.invoke(tabla); // explicit cast
         System.out.println("Valor devuelto por metodo:"+name);
 //            String p = "Juancho";
 //            Method thisMethod = thisClass.getDeclaredMethod("setNombre", params)

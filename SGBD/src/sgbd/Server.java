@@ -12,6 +12,7 @@ import java.util.Arrays;
 import javax.tools.JavaFileObject;
 import static sgbd.DynamicCompiler.classBuilder;
 import static sgbd.DynamicCompiler.compile;
+import static sgbd.DynamicCompiler.createObjects;
 import static sgbd.DynamicCompiler.getJavaFileObject;
 import sgbd.FileManager;
 
@@ -50,17 +51,16 @@ public class Server {
                 //case create table
                 case 2:
                     ArrayList<String> al = (ArrayList<String>) dIn.readObject();
-                                
+                    
                     /*creando la clase (tabla)*/
                     String str = classBuilder(al);
                     JavaFileObject file = getJavaFileObject(str,al.get(0));
                     Iterable<? extends JavaFileObject> files = Arrays.asList(file);
-
-                    //Compilando archivo
                     compile(files);
-
-                    //corre la clase (en progreso)
-                    //runIt(dt.get(0));
+                    
+                    /*creando archivo que guardara los registros*/
+                    fm.CreateTable(al);
+                        
                     break;
                 //sending databases
                 case 3:
@@ -70,7 +70,7 @@ public class Server {
                     dout.flush();
                     System.out.println("Data Sended");
                     break;
-                 //example the selected tables
+                 //sending selected tables
                 case 4:
                     String dbname = dIn.readUTF();
                     ArrayList<String> tables = fm.getTables(dbname);
@@ -79,14 +79,35 @@ public class Server {
                     dout1.flush();
                     System.out.println("Data Sended");
                     break;
+                //deletes DB
                 case 5:
                     name = dIn.readUTF();
                     fm.deleteDB(name);
                     break;
+                //deletes Tables
                 case 6:
                     name = dIn.readUTF();
                     fm.deleteTable(name);
                     break;                    
+                //creates a register on an archive
+                case 7:
+                    name = dIn.readUTF();
+                    fm.createRegister(name);
+                    break;
+               //send all registers from a table;
+                case 8:
+                    name = dIn.readUTF();
+                    String arr[] = name.split("_");
+                    
+                    ArrayList<String> regs = fm.showRegisters(arr[0], arr[1]);
+                    ArrayList<Object> objs = createObjects(regs,arr[1]);
+                    ObjectOutputStream dout2 = new ObjectOutputStream(socket.getOutputStream());
+                    dout2.writeObject(objs);
+                    dout2.flush();
+                    System.out.println("Object Sended");
+                    
+                    break;                
+                    
                     
                 default:
                     done = true;
