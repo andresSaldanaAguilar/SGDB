@@ -101,7 +101,6 @@ public class Client {
         dOut.writeByte(8);
         dOut.writeUTF(table);
         dOut.flush(); 
-        dOut.close();
         //get the objects
         ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
         ArrayList<Object> objects = (ArrayList<Object>) dIn.readObject();
