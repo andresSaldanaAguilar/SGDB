@@ -12,7 +12,6 @@ import javax.tools.JavaFileObject;
 import static sgbd.DynamicCompiler.classBuilder;
 import static sgbd.DynamicCompiler.compile;
 import static sgbd.DynamicCompiler.getJavaFileObject;
-import static sgbd.DynamicCompiler.runIt;
 
 public class Queries {
     private String KEY_HASHMAP;

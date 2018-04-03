@@ -111,8 +111,7 @@ public class DynamicCompiler
         }
     }
  
-    /** run class from the compiled byte code file by URLClassloader */
-    public static void runIt(String classname)
+    public static void runSet(String classname,String primitive,String column,String value)
     {
         // Create a File object on the root of the directory
         // containing the class file
@@ -132,51 +131,92 @@ public class DynamicCompiler
             Class thisClass = loader.loadClass(classname);
             Class params[] = {};
             System.out.println("Cargo bien la clase");
-            //Object paramsObj[] = {};
-            /*Object o = (Object)new String("Juancho");
-            Object[] param = new Object[]{o};
-            Object[] paramsObj = new Object[]{param};
-            Object instance = thisClass.newInstance();
-            Method thisMethod = thisClass.getDeclaredMethod("setNombre", params);
-            */
-            /*******************/
-        String ClassName = classname;
-        Class<?> tClass = Class.forName(ClassName); // convert string classname to class
-        Object tabla = tClass.newInstance(); // invoke empty constructor
-            System.out.println("Genero bien instancia "+tabla.getClass().getName());
-        String methodName = "";
 
-        // with single parameter, return void
-        methodName = "setuno";
-        Method setNameMethod = tabla.getClass().getMethod(methodName, String.class);
-        setNameMethod.invoke(tabla, 1); // pass arg
+            String ClassName = classname;
+            Class<?> tClass = Class.forName(ClassName); // convert string classname to class
+            Object tabla = tClass.newInstance(); // invoke empty constructor
+                System.out.println("Genero bien instancia "+tabla.getClass().getName());
+            String methodName = "";
 
-        // without parameters, return string
-        methodName = "getuno";
-        Method getNameMethod = tabla.getClass().getMethod(methodName);
-        String name = (String) getNameMethod.invoke(tabla); // explicit cast
-            System.out.println("Valor devuelto por metodo:"+name);
-//            String p = "Juancho";
-//            Method thisMethod = thisClass.getDeclaredMethod("setNombre", params)
-            /*********************/
-            // run the testAdd() method on the instance:
-//            thisMethod.invoke(instance, paramsObj);
-//            Method m1 = thisClass.getMethod("getNombre", null);
-//            Object ob = m1.invoke(instance, null);
-//            System.out.println("Dato devuelto: "+ob);
-        }
-        catch (MalformedURLException e)
+            // with single parameter, return void
+            methodName = "set"+column;
+            if(primitive.endsWith("String")){
+                Method setNameMethod = tabla.getClass().getMethod(methodName,String.class);
+                setNameMethod.invoke(tabla,value); // pass arg      
+            }
+            else{               
+                Method setNameMethod = tabla.getClass().getMethod(methodName,Integer.class);
+                setNameMethod.invoke(tabla,Integer.parseInt(value)); // pass arg
+            }
+
+            }
+            catch (MalformedURLException e)
+            {
+                System.out.println("malformedURL");
+            }
+            catch (ClassNotFoundException e)
+            {
+                System.out.println("class not found");
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+    }
+    
+    public static void runGet(String classname,String primitive,String column)
+    {
+        // Create a File object on the root of the directory
+        // containing the class file
+        File file = new File(classOutputFolder);
+ 
+        try
         {
-            System.out.println("malformedURL");
-        }
-        catch (ClassNotFoundException e)
-        {
-            System.out.println("class not found");
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
+            // Convert File to a URL
+            URL url = file.toURL(); // file:/classes/demo
+            URL[] urls = new URL[] { url };
+            System.out.println("dentro del metodo invoke..");
+            // Create a new class loader with the directory
+            ClassLoader loader = new URLClassLoader(urls);
+            System.out.println("crea cargador de clase");
+            // Load in the class; Class.childclass should be located in
+            // the directory file:/class/demo/
+            Class thisClass = loader.loadClass(classname);
+            Class params[] = {};
+            System.out.println("Cargo bien la clase");
+
+            String ClassName = classname;
+            Class<?> tClass = Class.forName(ClassName); // convert string classname to class
+            Object tabla = tClass.newInstance(); // invoke empty constructor
+                System.out.println("Genero bien instancia "+tabla.getClass().getName());
+            String methodName = "";
+
+            // with single parameter, return void
+            methodName = "get"+column;
+            if(primitive.endsWith("String")){
+                Method getNameMethod = tabla.getClass().getMethod(methodName);
+                String value = (String) getNameMethod.invoke(tabla); // explicit cast
+                System.out.println("Valor devuelto por metodo:"+value);            
+            }
+            else{               
+                Method getNameMethod = tabla.getClass().getMethod(methodName);
+                Integer value = (Integer) getNameMethod.invoke(tabla); // explicit cast
+                System.out.println("Valor devuelto por metodo:"+value);
+            }
+
+            }
+            catch (MalformedURLException e)
+            {
+                System.out.println("malformedURL");
+            }
+            catch (ClassNotFoundException e)
+            {
+                System.out.println("class not found");
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
     }
     
     /*creates the specified class on a string*/
@@ -206,6 +246,23 @@ public class DynamicCompiler
         return stringb;
     }
     
+    public static ArrayList<String> getDataTypes(ArrayList<String> genclass){
+        ArrayList<String> datatypes = new ArrayList();
+        for(int i = 1; i < genclass.size(); i++){
+            String[] parts = genclass.get(i).split(" ");          
+            datatypes.add(parts[0]);
+        }
+        return datatypes;
+    }
+  
+    public static ArrayList<String> getColumns(ArrayList<String> genclass){
+        ArrayList<String> datatypes = new ArrayList();
+        for(int i = 1; i < genclass.size(); i++){
+            String[] parts = genclass.get(i).split(" ");          
+            datatypes.add(parts[0]);
+        }
+        return datatypes;
+    }
  
     public static void main(String[] args) throws Exception
     {
@@ -223,7 +280,7 @@ public class DynamicCompiler
         compile(files);
  
         //3.Load your class by URLClassLoader, then instantiate the instance, and call method by reflection
-        runIt(al.get(0));
+        //runIt(al.get(0));
         System.out.println("fin del programa..");
       }
 }

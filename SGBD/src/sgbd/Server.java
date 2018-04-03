@@ -50,17 +50,16 @@ public class Server {
                 //case create table
                 case 2:
                     ArrayList<String> al = (ArrayList<String>) dIn.readObject();
-                                
+                    
                     /*creando la clase (tabla)*/
                     String str = classBuilder(al);
                     JavaFileObject file = getJavaFileObject(str,al.get(0));
                     Iterable<? extends JavaFileObject> files = Arrays.asList(file);
-
-                    //Compilando archivo
                     compile(files);
-
-                    //corre la clase (en progreso)
-                    //runIt(dt.get(0));
+                    
+                    /*creando archivo que guardara los registros*/
+                    fm.CreateTable(al);
+                        
                     break;
                 //sending databases
                 case 3:
@@ -70,7 +69,7 @@ public class Server {
                     dout.flush();
                     System.out.println("Data Sended");
                     break;
-                 //example the selected tables
+                 //sending selected tables
                 case 4:
                     String dbname = dIn.readUTF();
                     ArrayList<String> tables = fm.getTables(dbname);
@@ -79,14 +78,26 @@ public class Server {
                     dout1.flush();
                     System.out.println("Data Sended");
                     break;
+                //deletes DB
                 case 5:
                     name = dIn.readUTF();
                     fm.deleteDB(name);
                     break;
+                //deletes Tables
                 case 6:
                     name = dIn.readUTF();
                     fm.deleteTable(name);
                     break;                    
+               
+                case 7:
+                    name = dIn.readUTF();
+                    fm.createRegister(name);
+                    break;
+                /*case 8:
+                    name = dIn.readUTF();
+                    fm.createRegister(name);
+                    break;  */                  
+                    
                     
                 default:
                     done = true;
