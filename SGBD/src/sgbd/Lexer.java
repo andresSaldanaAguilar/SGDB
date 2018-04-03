@@ -172,8 +172,8 @@ public class Lexer {
             /*-------------------------------------------*/
 
             listOfData.add(0, getNameTable(SQL_QUERY));        /*Siempre el primer elemento será el nombre de la tabla*/            
-            listOfData = convertData(listOfData);            /*Convierte los tipos de datos para ser interpretados por JAVA*/
-            listOfData = correctFormat(listOfData);            /*Establece el formato typo_de_dato,nombre_de_dato y se guardan*/
+            listOfData = convertData(listOfData);            /*Convierte los tipos de datos para ser interpretados por JAVA*/         
+            listOfData = correctFormat(listOfData);            /*Establece el formato typo_de_dato,nombre_de_dato y se guardan*/            
             
             return listOfData;
         }else{
@@ -237,22 +237,22 @@ public class Lexer {
             if (listOfData.get(i).contains("String")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_STRING);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_STRING);
-            } else if (listOfData.get(i).contains("int")) {
+            } else if (listOfData.get(i).contains("Integer")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_INTEGER);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_INTEGER);
-            } else if (listOfData.get(i).contains("short")) {
+            } else if (listOfData.get(i).contains("Short")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_SHORT);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_SHORT);
-            } else if (listOfData.get(i).contains("boolean")) {
+            } else if (listOfData.get(i).contains("Boolean")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_BOOLEAN);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_BOOLEAN);
-            } else if (listOfData.get(i).contains("double")) {
+            } else if (listOfData.get(i).contains("Double")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_DOUBLE);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_DOUBLE);
-            } else if (listOfData.get(i).contains("long")) {
+            } else if (listOfData.get(i).contains("Long")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_LONG);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_LONG);
-            } else if (listOfData.get(i).contains("float")) {
+            } else if (listOfData.get(i).contains("Float")) {
                 TypeDataPrim = listOfData.get(i).substring(ln - LENGTH_FLOAT);
                 NameDataPrim = listOfData.get(i).substring(0, ln - LENGTH_FLOAT);
             }
@@ -299,7 +299,7 @@ public class Lexer {
         return values;
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         String sql = "CREATE TABLE UNO(uno INT, name VARCHAR(20), desc varchar(10), nosequeponer varchar(5), precio FLOAT);";
         System.out.println(sql);
         new Lexer().getDataTable(sql);
@@ -307,5 +307,5 @@ public class Lexer {
         String SQL = "CREATE TABLE A_UNO( nombre varchar(20), edad int, apellido varchar(10),precio FLOAT);";
         System.out.println(SQL);
         new Lexer().getDataTable(SQL);
-    }*/
+    }
 }
