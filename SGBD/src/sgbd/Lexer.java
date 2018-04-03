@@ -263,7 +263,7 @@ public class Lexer {
         return listOfData;
     }
     
-    public String getRegisters(String SQL_QUERY,String TABLE){
+    public String getRegisters(String SQL_QUERY,String TABLE,String BD){
         String[] segment; 
         String values ="",sentence="";
         
@@ -283,13 +283,14 @@ public class Lexer {
         if (sentence!=null) {
             if (sentence.contains("values")) {
                 //System.out.println("Sentence: "+sentence);
-                segment = sentence.split(TABLE+" values");
+                segment = sentence.split(BD+"_"+TABLE+" values");
             }else if(sentence.contains("VALUES")){
                 //System.out.println("Sentence: "+sentence);
                 segment = sentence.split(TABLE+" VALUES");
             }
             sentence = "";
             sentence= segment[1];
+            System.out.println("<<.."+sentence);
             //System.out.println("sentence2: "+sentence);
             segment = null;
             segment = sentence.split("\\(|\\)");

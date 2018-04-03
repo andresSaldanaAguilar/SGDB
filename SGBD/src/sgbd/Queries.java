@@ -157,9 +157,10 @@ public class Queries {
     }
     
     public String INSERT_INTO(String QUERY_INSERT) throws IOException, ClassNotFoundException{
+        System.out.println("query: "+QUERY_INSERT);
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
-        String sentence = TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB);
+        String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB,BD);
         System.out.println("->"+sentence);   
         CL.createRegister(sentence);    
         return sentence;
