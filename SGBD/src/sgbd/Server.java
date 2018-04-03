@@ -12,6 +12,7 @@ import java.util.Arrays;
 import javax.tools.JavaFileObject;
 import static sgbd.DynamicCompiler.classBuilder;
 import static sgbd.DynamicCompiler.compile;
+import static sgbd.DynamicCompiler.createObjects;
 import static sgbd.DynamicCompiler.getJavaFileObject;
 import sgbd.FileManager;
 
@@ -88,15 +89,24 @@ public class Server {
                     name = dIn.readUTF();
                     fm.deleteTable(name);
                     break;                    
-               
+                //creates a register on an archive
                 case 7:
                     name = dIn.readUTF();
                     fm.createRegister(name);
                     break;
-                /*case 8:
+               //send all registers from a table;
+                case 8:
                     name = dIn.readUTF();
-                    fm.createRegister(name);
-                    break;  */                  
+                    String arr[] = name.split("_");
+                    
+                    ArrayList<String> regs = fm.showRegisters(arr[0], arr[1]);
+                    ArrayList<Object> objs = createObjects(regs,arr[1]);
+                    ObjectOutputStream dout2 = new ObjectOutputStream(socket.getOutputStream());
+                    dout2.writeObject(objs);
+                    dout2.flush();
+                    System.out.println("Object Sended");
+                    
+                    break;                
                     
                     
                 default:

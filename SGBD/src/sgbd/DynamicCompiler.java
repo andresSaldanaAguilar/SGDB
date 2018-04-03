@@ -110,16 +110,15 @@ public class DynamicCompiler
             System.out.println("Succeeded");
         }
     }
- 
-    public static void runSet(String classname,String primitive,String column,String value)
-    {
-        // Create a File object on the root of the directory
-        // containing the class file
+    
+    
+    public static Object newInstance(String classname){
+        
         File file = new File(classOutputFolder);
- 
+        Object obj = null;
         try
         {
-            // Convert File to a URL
+                    // Convert File to a URL
             URL url = file.toURL(); // file:/classes/demo
             URL[] urls = new URL[] { url };
             System.out.println("dentro del metodo invoke..");
@@ -134,23 +133,9 @@ public class DynamicCompiler
 
             String ClassName = classname;
             Class<?> tClass = Class.forName(ClassName); // convert string classname to class
-            Object tabla = tClass.newInstance(); // invoke empty constructor
-                System.out.println("Genero bien instancia "+tabla.getClass().getName());
-            String methodName = "";
-
-            // with single parameter, return void
-            methodName = "set"+column;
-            if(primitive.endsWith("String")){
-                Method setNameMethod = tabla.getClass().getMethod(methodName,String.class);
-                setNameMethod.invoke(tabla,value); // pass arg      
-            }
-            else{               
-                Method setNameMethod = tabla.getClass().getMethod(methodName,Integer.class);
-                setNameMethod.invoke(tabla,Integer.parseInt(value)); // pass arg
-            }
-
-            }
-            catch (MalformedURLException e)
+            obj = tClass.newInstance(); // invoke empty constructor
+            System.out.println("Genero bien instancia "+obj.getClass().getName());
+        }catch (MalformedURLException e)
             {
                 System.out.println("malformedURL");
             }
@@ -162,56 +147,52 @@ public class DynamicCompiler
             {
                 ex.printStackTrace();
             }
+        return obj;
     }
-    
-    public static void runGet(String classname,String primitive,String column)
-    {
-        // Create a File object on the root of the directory
-        // containing the class file
-        File file = new File(classOutputFolder);
  
+    public static void runSet(String primitive,String column,String value,Object obj)
+    { 
         try
         {
-            // Convert File to a URL
-            URL url = file.toURL(); // file:/classes/demo
-            URL[] urls = new URL[] { url };
-            System.out.println("dentro del metodo invoke..");
-            // Create a new class loader with the directory
-            ClassLoader loader = new URLClassLoader(urls);
-            System.out.println("crea cargador de clase");
-            // Load in the class; Class.childclass should be located in
-            // the directory file:/class/demo/
-            Class thisClass = loader.loadClass(classname);
-            Class params[] = {};
-            System.out.println("Cargo bien la clase");
+            String methodName = "";
 
-            String ClassName = classname;
-            Class<?> tClass = Class.forName(ClassName); // convert string classname to class
-            Object tabla = tClass.newInstance(); // invoke empty constructor
-                System.out.println("Genero bien instancia "+tabla.getClass().getName());
+            // with single parameter, return void
+            methodName = "set"+column;
+            if(primitive.endsWith("String")){
+                Method setNameMethod = obj.getClass().getMethod(methodName,String.class);
+                setNameMethod.invoke(obj,value); // pass arg      
+            }
+            else{               
+                Method setNameMethod = obj.getClass().getMethod(methodName,Integer.class);
+                setNameMethod.invoke(obj,Integer.parseInt(value)); // pass arg
+            }
+            System.out.println("Succesful set");
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+    }
+    
+    public static void runGet(String primitive,String column,Object obj)
+    {
+        try
+        {
             String methodName = "";
 
             // with single parameter, return void
             methodName = "get"+column;
             if(primitive.endsWith("String")){
-                Method getNameMethod = tabla.getClass().getMethod(methodName);
-                String value = (String) getNameMethod.invoke(tabla); // explicit cast
+                Method getNameMethod = obj.getClass().getMethod(methodName);
+                String value = (String) getNameMethod.invoke(obj); // explicit cast
                 System.out.println("Valor devuelto por metodo:"+value);            
             }
             else{               
-                Method getNameMethod = tabla.getClass().getMethod(methodName);
-                Integer value = (Integer) getNameMethod.invoke(tabla); // explicit cast
+                Method getNameMethod = obj.getClass().getMethod(methodName);
+                Integer value = (Integer) getNameMethod.invoke(obj); // explicit cast
                 System.out.println("Valor devuelto por metodo:"+value);
             }
 
-            }
-            catch (MalformedURLException e)
-            {
-                System.out.println("malformedURL");
-            }
-            catch (ClassNotFoundException e)
-            {
-                System.out.println("class not found");
             }
             catch (Exception ex)
             {
@@ -246,22 +227,26 @@ public class DynamicCompiler
         return stringb;
     }
     
-    public static ArrayList<String> getDataTypes(ArrayList<String> genclass){
+    public static ArrayList<Object> createObjects(ArrayList<String> registers,String classname){
+        String[] headers =registers.get(0).split("_");
         ArrayList<String> datatypes = new ArrayList();
-        for(int i = 1; i < genclass.size(); i++){
-            String[] parts = genclass.get(i).split(" ");          
-            datatypes.add(parts[0]);
+        ArrayList<String> names = new ArrayList();
+        for(String header: headers){
+            String[] aux = header.split(" ");
+            names.add(aux[0]);
+            datatypes.add(aux[1]);            
         }
-        return datatypes;
-    }
-  
-    public static ArrayList<String> getColumns(ArrayList<String> genclass){
-        ArrayList<String> datatypes = new ArrayList();
-        for(int i = 1; i < genclass.size(); i++){
-            String[] parts = genclass.get(i).split(" ");          
-            datatypes.add(parts[0]);
+        ArrayList<Object> objects = new ArrayList();
+        for(int i =1; i<registers.size();i++){
+            Object obj = (classname);
+            String[] reg = registers.get(i).split("_");
+            for(int j =0; j<datatypes.size();j++){
+                runSet(datatypes.get(j),names.get(j),reg[i],obj);
+            }
+            objects.add(obj);
         }
-        return datatypes;
+        return objects;
+        
     }
  
     public static void main(String[] args) throws Exception
@@ -269,8 +254,8 @@ public class DynamicCompiler
         //1.Construct an in-memory java source file from your dynamic code
         ArrayList<String>  al= new ArrayList();
         al.add("nada");
-        al.add("int uno ;");
-        al.add("int dos ;");
+        al.add("Integer uno ;");
+        al.add("Integer dos ;");
         String str = classBuilder(al);
            
         JavaFileObject file = getJavaFileObject(str,al.get(0));
@@ -280,7 +265,8 @@ public class DynamicCompiler
         compile(files);
  
         //3.Load your class by URLClassLoader, then instantiate the instance, and call method by reflection
-        //runIt(al.get(0));
-        System.out.println("fin del programa..");
+        Object obj = newInstance("uno_pollito");
+        runSet("Integer","edad","12",obj);
+        runGet("Integer","edad",obj);
       }
 }
