@@ -174,8 +174,9 @@ public class DynamicCompiler
             }
     }
     
-    public static void runGet(String primitive,String column,Object obj)
+    public static String runGet(String primitive,String column,Object obj)
     {
+        String finalvalue ="";
         try
         {
             String methodName = "";
@@ -185,12 +186,14 @@ public class DynamicCompiler
             if(primitive.endsWith("String")){
                 Method getNameMethod = obj.getClass().getMethod(methodName);
                 String value = (String) getNameMethod.invoke(obj); // explicit cast
-                System.out.println("Valor devuelto por metodo:"+value);            
+                System.out.println("Valor devuelto por metodo:"+value);  
+                finalvalue += value;
             }
             else{               
                 Method getNameMethod = obj.getClass().getMethod(methodName);
                 Integer value = (Integer) getNameMethod.invoke(obj); // explicit cast
                 System.out.println("Valor devuelto por metodo:"+value);
+                finalvalue += value;
             }
 
             }
@@ -198,6 +201,7 @@ public class DynamicCompiler
             {
                 ex.printStackTrace();
             }
+        return finalvalue;
     }
     
     /*creates the specified class on a string*/
@@ -251,20 +255,30 @@ public class DynamicCompiler
         return objects;     
     }
     
-    public static void readObjects(ArrayList<Object> objects,ArrayList<String> registers){
+    public static ArrayList<String> readObjects(ArrayList<Object> objects,ArrayList<String> registers){
         String[] headers =registers.get(0).split("_");
         ArrayList<String> datatypes = new ArrayList();
         ArrayList<String> names = new ArrayList();
         for(String header: headers){
             String[] aux = header.split(" ");
-            names.add(aux[0]);
-            datatypes.add(aux[1]);            
+            names.add(aux[1]);
+            datatypes.add(aux[0]);            
         }
+        ArrayList<String> li = new ArrayList();
         for(int i =0; i<objects.size();i++){
+            String aux = "";
             for(int j =0; j<datatypes.size();j++){
-                runGet(datatypes.get(j),names.get(j),objects.get(i));
+                if(j==datatypes.size()-1){
+                    aux += runGet(datatypes.get(j),names.get(j),objects.get(i));
+                }
+                else{
+                    aux += runGet(datatypes.get(j),names.get(j),objects.get(i))+"_";                    
+                }
+
             }
-        }    
+            li.add(aux);
+        }   
+        return li;
     }    
  
     public static void main(String[] args) throws Exception

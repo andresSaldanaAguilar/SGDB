@@ -118,7 +118,7 @@ public class Client {
         Socket socket = new Socket("localhost",3000);
         ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
         // Send the action
-        dOut.writeByte(8);
+        dOut.writeByte(9);
         dOut.writeUTF(table);
         dOut.flush(); 
         //get the objects
@@ -143,11 +143,12 @@ public class Client {
         //ArrayList<String> dbs = c.getTables("db");
         ArrayList<Object> objs =c.getRegisters("dos_moe");
         System.out.println(objs.size());
-        //ArrayList<String> regs =c.showRegisters("dos_moe");
-        
-        for(Object obj:objs){
-            System.out.println(obj);
+        ArrayList<String> regs =c.showRegisters("dos_moe");
+        System.out.println(regs.size());
+
+        ArrayList<String> li = readObjects(objs,regs);
+        for(String l:li){
+            System.out.println(l);
         }
-        //readObjects(objs,regs);
     }
 }

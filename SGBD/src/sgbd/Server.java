@@ -115,7 +115,7 @@ public class Server {
                     name = dIn.readUTF();
                     String arr1[] = name.split("_");
                     
-                    ArrayList<String> regs1 = fm.showRegisters(arr1[0], arr1[1]);
+                    ArrayList<String> regs1 = fm.showRegisters(arr1[0], name);
                     
                     ObjectOutputStream dout3 = new ObjectOutputStream(socket.getOutputStream());
                     dout3.writeObject(regs1);
