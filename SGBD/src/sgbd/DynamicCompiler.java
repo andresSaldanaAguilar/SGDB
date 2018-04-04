@@ -228,19 +228,21 @@ public class DynamicCompiler
     }
     
     public static ArrayList<Object> createObjects(ArrayList<String> registers,String classname){
+        //separa los registros
         String[] headers =registers.get(0).split("_");
+
         ArrayList<String> datatypes = new ArrayList();
         ArrayList<String> names = new ArrayList();
         for(String header: headers){
             String[] aux = header.split(" ");
-            names.add(aux[0]);
-            datatypes.add(aux[1]);            
+            names.add(aux[1]);
+            datatypes.add(aux[0]);            
         }
         ArrayList<Object> objects = new ArrayList();
         for(int i =1; i<registers.size();i++){
-            System.out.println(i);
-            Object obj = newInstance(classname+";");
+            Object obj = newInstance(classname);
             String[] reg = registers.get(i).split("_");
+  
             for(int j =0; j<datatypes.size();j++){
                 runSet(datatypes.get(j),names.get(j),reg[j],obj);
             }

@@ -137,16 +137,17 @@ public class Client {
 //        for(String db:l){
 //            System.out.println(db);
 //        }
-        c.createRegister("dos_cosa_elioth,19,59");
+        //c.createRegister("dos_moe_elioth,19,59");
 //        tables working good
         
         //ArrayList<String> dbs = c.getTables("db");
-        ArrayList<Object> objs =c.getRegisters("dos_cosa");
+        ArrayList<Object> objs =c.getRegisters("dos_moe");
         System.out.println(objs.size());
-        //ArrayList<String> regs =c.showRegisters("dos_cosa");
-        //for(Object obj:objs){
-        //    System.out.println(obj);
-        //}
+        //ArrayList<String> regs =c.showRegisters("dos_moe");
+        
+        for(Object obj:objs){
+            System.out.println(obj);
+        }
         //readObjects(objs,regs);
     }
 }

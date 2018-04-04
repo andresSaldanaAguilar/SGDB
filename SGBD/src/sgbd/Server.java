@@ -101,9 +101,8 @@ public class Server {
                     String arr[] = name.split("_");
                     
                     ArrayList<String> regs = fm.showRegisters(arr[0], name);
-                    System.out.println("regs size: "+regs.size());
                     ArrayList<Object> objs = createObjects(regs,name);
-                    readObjects(objs,regs);
+                    //readObjects(objs,regs);
                     
                     ObjectOutputStream dout2 = new ObjectOutputStream(socket.getOutputStream());
                     dout2.writeObject(objs);
