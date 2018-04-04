@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import static sgbd.DynamicCompiler.readObjects;
 
 public class Client {
 
@@ -84,6 +85,7 @@ public class Client {
         return tables; 
     }
     
+    //enviar algo asi: BD_tabla_elioth,19,59
     void createRegister(String reg) throws IOException{
         Socket socket = new Socket("localhost",3000);
         ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
@@ -94,6 +96,7 @@ public class Client {
         dOut.close();            
     }
     
+    //enviar bd_tabla
     ArrayList<Object> getRegisters(String table) throws IOException, ClassNotFoundException{
         Socket socket = new Socket("localhost",3000);
         ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
@@ -110,14 +113,39 @@ public class Client {
         return objects; 
     }
     
-    //get all the tables from all the existing dbs
-    
+    //traer lista necesaria para el metodo anterior
+    ArrayList<String> showRegisters(String table) throws IOException, ClassNotFoundException{
+        Socket socket = new Socket("localhost",3000);
+        ObjectOutputStream dOut = new ObjectOutputStream(socket.getOutputStream());
+        // Send the action
+        dOut.writeByte(8);
+        dOut.writeUTF(table);
+        dOut.flush(); 
+        //get the objects
+        ObjectInputStream dIn = new ObjectInputStream(socket.getInputStream());
+        ArrayList<String> regs = (ArrayList<String>) dIn.readObject();
+        
+        dIn.close();
+        dOut.close();
+        return regs; 
+    }
 
     
-    /*public static void main(String[] args)throws Exception{
+    public static void main(String[] args)throws Exception{
         Client c= new Client();
-        c.getDBs();
-        ArrayList<String> dbs = c.getTables("db");
+//        ArrayList<String> l= c.getDBs();
+//        for(String db:l){
+//            System.out.println(db);
+//        }
+//        c.createRegister("BD_tabla_elioth,19,59");
+//        tables working good
         
-    }*/
+        //ArrayList<String> dbs = c.getTables("db");
+        ArrayList<Object> objs =c.getRegisters("BD_tabla");
+        ArrayList<String> regs =c.showRegisters("BD_tabla");
+        for(Object obj:objs){
+            System.out.println(obj);
+        }
+        readObjects(objs,regs);
+    }
 }

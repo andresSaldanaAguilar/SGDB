@@ -2,9 +2,17 @@ package sgbd;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.tools.JavaFileObject;
+import static sgbd.DynamicCompiler.classBuilder;
+import static sgbd.DynamicCompiler.compile;
+import static sgbd.DynamicCompiler.createObjects;
+import static sgbd.DynamicCompiler.getJavaFileObject;
+import static sgbd.DynamicCompiler.newInstance;
+import static sgbd.DynamicCompiler.readObjects;
 
 
 
@@ -73,7 +81,7 @@ public class FileManager {
                     cols += arraux[0]+" "+arraux[1]+"_";
                 }
             }
-            writer.write(cols+"\n");
+            writer.write(cols);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +99,7 @@ public class FileManager {
     
     //provides all database names
     ArrayList<String> getTables(String database){
-        File folder = new File("./build/classes/");
+        File folder = new File("./DB/"+database+"/");
         File[] listOfFiles = folder.listFiles();
         ArrayList<String> list = new ArrayList();
         for (int i = 0; i < listOfFiles.length; i++){
@@ -166,24 +174,48 @@ public class FileManager {
     } catch (IOException e) {
             e.printStackTrace();
     }
-
         return list;
+    
     }
 
     
  
     public static void main(String args[]){
         
+        //crea archivo
         FileManager r= new FileManager();
-        /*ArrayList<String> al = new ArrayList();
+        ArrayList<String> al = new ArrayList();
         al.add("BD_tabla");
         al.add("nombre String");
         al.add("edad Integer");
         al.add("peso Integer");
-        r.CreateTable(al);*/
-        //r.createRegister("BD_tabla_andres,12,64");
+        r.CreateTable(al);
 
-        ArrayList<String> list = r.showRegisters("BD","tabla");
+        //crea clase
+        ArrayList<String>  al1= new ArrayList();
+        al1.add("BD_tabla");
+        al1.add("String nombre ;");
+        al1.add("Integer peso ;");
+        al1.add("Integer edad ;");
+
+        String str = classBuilder(al1);
+           
+        JavaFileObject file = getJavaFileObject(str,al1.get(0));
+        Iterable<? extends JavaFileObject> files = Arrays.asList(file);
+        
+        //2.Compile your files by JavaCompiler
+        compile(files);
+        
+        //crea registro
+        //r.createRegister("BD_tabla_elioth,19,59");
+                
+        //traemos registros
+        ArrayList<String> list2 = r.showRegisters("BD","tabla");
+        System.out.println("tamaño:"+list2.size());
+        
+        //creamos objetos
+        ArrayList<Object> objs = createObjects(list2,"BD_tabla");
+        readObjects(objs,list2);
         
     }
 

@@ -202,7 +202,7 @@ public class DynamicCompiler
     
     /*creates the specified class on a string*/
     public static String classBuilder(ArrayList<String> genclass){
-        String stringb= "/*package math;*/ public class "+genclass.get(0)+" {";
+        String stringb= "/*package math;*/ public class "+genclass.get(0)+" implements java.io.Serializable {";
         //concatenate the attributes
         for(int i = 1; i < genclass.size(); i++){
             stringb+= "public " + genclass.get(i);
@@ -238,24 +238,42 @@ public class DynamicCompiler
         }
         ArrayList<Object> objects = new ArrayList();
         for(int i =1; i<registers.size();i++){
-            Object obj = (classname);
+            System.out.println(i);
+            Object obj = newInstance(classname);
             String[] reg = registers.get(i).split("_");
             for(int j =0; j<datatypes.size();j++){
-                runSet(datatypes.get(j),names.get(j),reg[i],obj);
+                runSet(datatypes.get(j),names.get(j),reg[j],obj);
             }
             objects.add(obj);
         }
-        return objects;
-        
+        return objects;     
     }
+    
+    public static void readObjects(ArrayList<Object> objects,ArrayList<String> registers){
+        String[] headers =registers.get(0).split("_");
+        ArrayList<String> datatypes = new ArrayList();
+        ArrayList<String> names = new ArrayList();
+        for(String header: headers){
+            String[] aux = header.split(" ");
+            names.add(aux[0]);
+            datatypes.add(aux[1]);            
+        }
+        for(int i =0; i<objects.size();i++){
+            for(int j =0; j<datatypes.size();j++){
+                runGet(datatypes.get(j),names.get(j),objects.get(i));
+            }
+        }    
+    }    
  
     public static void main(String[] args) throws Exception
     {
         //1.Construct an in-memory java source file from your dynamic code
         ArrayList<String>  al= new ArrayList();
-        al.add("nada");
-        al.add("Integer uno ;");
-        al.add("Integer dos ;");
+        al.add("BD_tabla");
+        al.add("String nombre ;");
+        al.add("Integer peso ;");
+        al.add("Integer edad ;");
+
         String str = classBuilder(al);
            
         JavaFileObject file = getJavaFileObject(str,al.get(0));
@@ -265,8 +283,8 @@ public class DynamicCompiler
         compile(files);
  
         //3.Load your class by URLClassLoader, then instantiate the instance, and call method by reflection
-        Object obj = newInstance("uno_pollito");
+        /*Object obj = newInstance("uno_pollito");
         runSet("Integer","edad","12",obj);
-        runGet("Integer","edad",obj);
+        runGet("Integer","edad",obj);*/
       }
 }

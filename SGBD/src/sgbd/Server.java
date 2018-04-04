@@ -14,6 +14,7 @@ import static sgbd.DynamicCompiler.classBuilder;
 import static sgbd.DynamicCompiler.compile;
 import static sgbd.DynamicCompiler.createObjects;
 import static sgbd.DynamicCompiler.getJavaFileObject;
+import static sgbd.DynamicCompiler.readObjects;
 import sgbd.FileManager;
 
 public class Server {
@@ -94,20 +95,34 @@ public class Server {
                     name = dIn.readUTF();
                     fm.createRegister(name);
                     break;
-               //send all registers from a table;
+                //send all registers from a table;
                 case 8:
                     name = dIn.readUTF();
                     String arr[] = name.split("_");
                     
                     ArrayList<String> regs = fm.showRegisters(arr[0], arr[1]);
-                    ArrayList<Object> objs = createObjects(regs,arr[1]);
+                    ArrayList<Object> objs = createObjects(regs,name);
+                    readObjects(objs,regs);
+                    
                     ObjectOutputStream dout2 = new ObjectOutputStream(socket.getOutputStream());
                     dout2.writeObject(objs);
                     dout2.flush();
                     System.out.println("Object Sended");
                     
                     break;                
+                //comodin
+                case 9:
+                    name = dIn.readUTF();
+                    String arr1[] = name.split("_");
                     
+                    ArrayList<String> regs1 = fm.showRegisters(arr1[0], arr1[1]);
+                    
+                    ObjectOutputStream dout3 = new ObjectOutputStream(socket.getOutputStream());
+                    dout3.writeObject(regs1);
+                    dout3.flush();
+                    System.out.println("Object Sended");
+                    
+                    break;     
                     
                 default:
                     done = true;
