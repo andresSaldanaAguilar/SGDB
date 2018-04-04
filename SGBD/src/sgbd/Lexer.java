@@ -142,7 +142,7 @@ public class Lexer {
         return BD_toUse;
     }
 
-    public ArrayList<String> getDataTable(String SQL_QUERY) {
+    public ArrayList<String> getDataTable(String nameBD,String SQL_QUERY) {
         List<String> data;          /*Lista de datos a mandar*/
         String[] segment;           /*Segmentos de la consulta*/
         String sentence = "", flag = "";    /*sentencia de query y bandera para formato*/
@@ -188,7 +188,7 @@ public class Lexer {
             listOfData.addAll(data);
             /*-------------------------------------------*/
 
-            listOfData.add(0, getNameTable(SQL_QUERY));        /*Siempre el primer elemento será el nombre de la tabla*/            
+            listOfData.add(0, nameBD+"_"+getNameTable(SQL_QUERY));        /*Siempre el primer elemento será el nombre de la tabla*/            
             listOfData = convertData(listOfData);            /*Convierte los tipos de datos para ser interpretados por JAVA*/         
             listOfData = correctFormat(listOfData);            /*Establece el formato typo_de_dato,nombre_de_dato y se guardan*/            
             
@@ -322,7 +322,7 @@ public class Lexer {
         return values;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String sql = "CREATE TABLE UNO(uno INT, name VARCHAR(20), desc varchar(10), nosequeponer varchar(5), precio FLOAT);";
         System.out.println(sql);
         new Lexer().getDataTable(sql);
@@ -331,7 +331,7 @@ public class Lexer {
         System.out.println(SQL);
         new Lexer().getDataTable(SQL);
         /*String slx = "INSERT INTO UNO(10,12);";
-        new Lexer().getRegisters(SQL, "UNO");*/
+        new Lexer().getRegisters(SQL, "UNO");
         
-    }
+    }*/
 }

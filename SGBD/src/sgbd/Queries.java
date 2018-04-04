@@ -127,8 +127,8 @@ public class Queries {
                 }else{
                     TABLE.getTABLE().put(TABLE.getKEY_HASHMAP_TABLE(), REGISTER);
                     System.out.println("Table '"+TABLE.getKEY_HASHMAP_TABLE()+"' created");
-                    ArrayList<String> dt = LEXER.getDataTable(QUERY_CREATE_TB);
-                    dt.set(0, TABLE.getNAME_DATABASE()+"_"+dt.get(0));
+                    ArrayList<String> dt = LEXER.getDataTable(TABLE.getNAME_DATABASE(),QUERY_CREATE_TB);
+                    System.out.println("MCREATEDATA: "+dt.get(0));
                     CL.createTable(dt);
                     return dt;         /*Regresa un ArrayList con los atributos de la tabla*/
                 }
