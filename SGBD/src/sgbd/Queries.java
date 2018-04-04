@@ -235,7 +235,7 @@ public class Queries {
                 CREATE_TABLE("CREATE TABLE "+recoverTable.get(i));
                 System.out.println(" |-Table: "+recoverTable.get(i));
                 System.out.println("Getting registers from "+recoverTable.get(i));
-                //fill_Register_ByTB(recoverTable.get(i));
+                fill_Register_ByTB(name_BD,recoverTable.get(i));
             }
             System.out.println("____________");
         } catch (Exception e) {
@@ -243,30 +243,11 @@ public class Queries {
         }
     }
     
-    public void fill_Tables_ByDB(String name_BD){
-        ArrayList<String> old_Tables;
-        String TB="";
-        System.out.println("Kaaai");
-        try {
-            old_Tables = CL.getTables(name_BD);
-            for (int i = 0; i < old_Tables.size(); i++) {             
-                    USE_DATABASE("USE DATABASE "+name_BD);
-                    CREATE_TABLE("CREATE TABLE "+old_Tables.get(i));
-                    System.out.println("  |-Tables recover: "+old_Tables.get(i)); /*HASTA AQUI YA*/
-//                    TB = old_Tables.get(i);
-//                    fill_Register_ByTB(TB);
-                    System.out.println("________");
-                
-            }
-        } catch (Exception e) {
-            System.err.println("Error to fill tables"+e.getMessage());
-        }
-    }
     
-    public void fill_Register_ByTB(String NAME_TB){
+    public void fill_Register_ByTB(String NAME_BD,String NAME_TB){
         ArrayList<Object> old_Register;
         try {
-            old_Register = CL.getRegisters(NAME_TB);
+            old_Register = CL.getRegisters(NAME_BD+"_"+NAME_TB);
             for (int i = 0; i < old_Register.size(); i++) {
                 System.out.println("**"+old_Register.get(i));
             }
