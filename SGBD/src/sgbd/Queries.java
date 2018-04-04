@@ -13,6 +13,7 @@ import javax.tools.JavaFileObject;
 import static sgbd.DynamicCompiler.classBuilder;
 import static sgbd.DynamicCompiler.compile;
 import static sgbd.DynamicCompiler.getJavaFileObject;
+import static sgbd.DynamicCompiler.readObjects;
 
 public class Queries {
     private String KEY_HASHMAP;
@@ -244,9 +245,13 @@ public class Queries {
     }
     
     
-    public void fill_Register_ByTB(String NAME_BD,String NAME_TB){
-        ArrayList<Object> old_Register;
-        old_Register= new ArrayList<>(); /*aqui andy*/
+    public void fill_Register_ByTB(String NAME_BD,String NAME_TB) throws IOException, ClassNotFoundException{
+        ArrayList<String> old_Register = new ArrayList();
+        ArrayList<Object> objs =CL.getRegisters(NAME_BD+"_"+NAME_TB);
+        System.out.println(objs.size());
+        ArrayList<String> regs =CL.showRegisters(NAME_BD+"_"+NAME_TB);
+        //arreglo con valores de registros de una tabla
+        old_Register = readObjects(objs,regs);
         for (int i = 0; i < old_Register.size(); i++) {
             System.out.println("**"+old_Register.get(i));
         }
