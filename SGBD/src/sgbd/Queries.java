@@ -246,13 +246,9 @@ public class Queries {
     
     public void fill_Register_ByTB(String NAME_BD,String NAME_TB){
         ArrayList<Object> old_Register;
-        try {
-            old_Register = CL.getRegisters(NAME_BD+"_"+NAME_TB);
-            for (int i = 0; i < old_Register.size(); i++) {
-                System.out.println("**"+old_Register.get(i));
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println(""+e.getMessage());
+        old_Register= new ArrayList<>(); /*aqui andy*/
+        for (int i = 0; i < old_Register.size(); i++) {
+            System.out.println("**"+old_Register.get(i));
         }
     }
     /*----------------------------------------------------*/
