@@ -65,7 +65,7 @@ public class FileManager {
         BufferedWriter writer = null;
         try {
             //creating containing file
-            File file = new File("./DB/"+database+"/"+table+".txt");
+            File file = new File("./DB/"+database+"/"+database+"_"+table+".txt");
             file.getParentFile().mkdirs(); 
             file.createNewFile();
             writer = new BufferedWriter(new FileWriter(file));
@@ -149,7 +149,7 @@ public class FileManager {
         String values = arr[2];
         String newvalues = values.replace(",", "_");
         
-        try(FileWriter fw = new FileWriter("./DB/"+dbname+"/"+tbname+".txt", true);
+        try(FileWriter fw = new FileWriter("./DB/"+dbname+"/"+dbname+"_"+tbname+".txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {

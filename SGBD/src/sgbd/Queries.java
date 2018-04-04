@@ -143,7 +143,8 @@ public class Queries {
     }
     
     public void SHOW_TABLES(){      /*SHOW EXISTING TABLES INSIDE OF A DATABASE*/
-        /* Despliega el contenido usando un Iterador*/
+        try {
+            /* Despliega el contenido usando un Iterador*/
         Set set = TABLE.getTABLE().entrySet();
         Iterator iterator = set.iterator();
         System.out.println("+------------------------+\n"+
@@ -154,14 +155,17 @@ public class Queries {
             System.out.println("|"+ mentry.getKey());
         }
         System.out.println("+------------------------+\n");
+        } catch (Exception e) {
+            System.out.println("No Database selected");
+        }
     }
     
     public String INSERT_INTO(String QUERY_INSERT) throws IOException, ClassNotFoundException{
         System.out.println("query: "+QUERY_INSERT);
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
-        String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT,TB,BD);
-        System.out.println("->"+sentence);   
+        String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT);
+        System.out.println("format insert: ->"+sentence);   
         CL.createRegister(sentence);    
         return sentence;
     }
@@ -173,36 +177,53 @@ public class Queries {
         ArrayList<String> old_databases;
         try {
             old_databases = CL.getDBs();
+            System.out.println("Recovering databases ...");
             for (int i = 0; i < old_databases.size(); i++) {
                 if (old_databases.get(i)!=null) {
-//                    System.out.println(">>"+old_databases.get(i));
                     CREATE_DB("CREATE DATABASE "+old_databases.get(i));
-                    fill_Tables_ByDB(old_databases.get(i));
+                    //fill_Tables_ByDB(old_databases.get(i));
+                    fill_Tables(old_databases.get(i));
+                    System.out.println("|--Database recovered: "+old_databases.get(i));
                 }
             }
+            System.out.println("....");
+            System.out.println("Databases recovered");
             SHOW_DATABASES();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error to fill databases"+e.getMessage());
+        }
+    }
+    
+    public void fill_Tables(String name_BD){
+        ArrayList<String> recoverTable;
+        System.out.println("Si entro: "+name_BD);
+        try {
+            recoverTable = CL.getTables(name_BD);
+            for (int i = 0; i < recoverTable.size(); i++) {
+                System.out.println(" |-Table: "+recoverTable.get(i));
+            }
+        } catch (Exception e) {
+            System.out.println("-aaaa");
         }
     }
     
     public void fill_Tables_ByDB(String name_BD){
         ArrayList<String> old_Tables;
         String TB="";
+        System.out.println("Kaaai");
         try {
             old_Tables = CL.getTables(name_BD);
-            for (int i = 0; i < old_Tables.size(); i++) {
-                if (old_Tables.get(i).contains(name_BD)) {
+            for (int i = 0; i < old_Tables.size(); i++) {             
                     USE_DATABASE("USE DATABASE "+name_BD);
                     CREATE_TABLE("CREATE TABLE "+old_Tables.get(i));
-                    System.out.println(">>"+old_Tables.get(i));
-                    TB = old_Tables.get(i);
-                    fill_Register_ByTB(TB);
+                    System.out.println("  |-Tables recover: "+old_Tables.get(i));
+//                    TB = old_Tables.get(i);
+//                    fill_Register_ByTB(TB);
                     System.out.println("________");
-                }
+                
             }
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error to fill tables"+e.getMessage());
         }
     }
     

@@ -263,7 +263,7 @@ public class Lexer {
         return listOfData;
     }
     
-    public String getRegisters(String SQL_QUERY,String TABLE,String BD){
+    public String getRegisters(String SQL_QUERY){
         String[] segment; 
         String values ="",sentence="";
         
@@ -279,24 +279,24 @@ public class Lexer {
             sentence = null;
         }
         /*-----------------------------------------------------*/
+        System.out.println("getregi:"+sentence);
         segment = null;
         if (sentence!=null) {
             if (sentence.contains("values")) {
-                //System.out.println("Sentence: "+sentence);
-                segment = sentence.split(BD.toLowerCase()+"_"+TABLE.toLowerCase()+" values");
+                System.out.println("Sentence: "+sentence);
+                segment = sentence.split("values");
             }else if(sentence.contains("VALUES")){
-                //System.out.println("Sentence: "+sentence);
-                segment = sentence.split(BD+"_"+"_"+TABLE+" VALUES");
+                System.out.println("Sentence: "+sentence);
+                segment = sentence.split("VALUES");
             }
             sentence = "";
             sentence= segment[1];
-            System.out.println("<<.."+sentence);
-            //System.out.println("sentence2: "+sentence);
+            System.out.println("sentence2: "+sentence);
             segment = null;
             segment = sentence.split("\\(|\\)");
             sentence = "";
             sentence = segment[1];
-            //System.out.println("sentence3:"+sentence);
+            System.out.println("sentence3:"+sentence);
             values = sentence;
         }else{
             System.out.println("Error. Registers didn't create");
