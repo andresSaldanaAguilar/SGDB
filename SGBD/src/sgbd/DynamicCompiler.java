@@ -202,7 +202,7 @@ public class DynamicCompiler
     
     /*creates the specified class on a string*/
     public static String classBuilder(ArrayList<String> genclass){
-        String stringb= "/*package math;*/ public class "+genclass.get(0)+" implements java.io.Serializable {";
+        String stringb= "/*package math;*/ public class "+genclass.get(0).replace(";","")+" implements java.io.Serializable {";
         //concatenate the attributes
         for(int i = 1; i < genclass.size(); i++){
             stringb+= "public " + genclass.get(i);
@@ -239,7 +239,7 @@ public class DynamicCompiler
         ArrayList<Object> objects = new ArrayList();
         for(int i =1; i<registers.size();i++){
             System.out.println(i);
-            Object obj = newInstance(classname);
+            Object obj = newInstance(classname+";");
             String[] reg = registers.get(i).split("_");
             for(int j =0; j<datatypes.size();j++){
                 runSet(datatypes.get(j),names.get(j),reg[j],obj);

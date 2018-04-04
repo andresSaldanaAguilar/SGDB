@@ -57,7 +57,7 @@ public class FileManager {
     boolean CreateTable(ArrayList<String> al){              
         //this file is just for validation terms
         String[] arr = al.get(0).split("_");
-        String table = arr[1];
+        String table = arr[1].replace(";","");
         String database = arr[0];         
         File provfile = new File("./DB/"+database+"/"+table+".txt");
         if(!provfile.exists()){
@@ -161,21 +161,19 @@ public class FileManager {
         return false;
     }
     
-    ArrayList<String> showRegisters(String dbname,String tbname){
-        
-    ArrayList<String> list = new ArrayList();    
-    try (BufferedReader br = new BufferedReader(new FileReader("./DB/"+dbname+"/"+tbname+".txt"))) {
+    ArrayList<String> showRegisters(String dbname,String tbname){       
+        ArrayList<String> list = new ArrayList();    
+        try (BufferedReader br = new BufferedReader(new FileReader("./DB/"+dbname+"/"+tbname+".txt"))) {
 
-        String currentLine;
-        while ((currentLine = br.readLine()) != null) {
-            list.add(currentLine);
+            String currentLine;
+            while ((currentLine = br.readLine()) != null) {
+                list.add(currentLine);
+            }
+
+        } catch (IOException e) {
+                e.printStackTrace();
         }
-            
-    } catch (IOException e) {
-            e.printStackTrace();
-    }
-        return list;
-    
+        return list;    
     }
 
     

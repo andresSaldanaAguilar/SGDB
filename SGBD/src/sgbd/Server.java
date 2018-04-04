@@ -55,7 +55,7 @@ public class Server {
                     
                     /*creando la clase (tabla)*/
                     String str = classBuilder(al);
-                    JavaFileObject file = getJavaFileObject(str,al.get(0));
+                    JavaFileObject file = getJavaFileObject(str,al.get(0).replace(";",""));
                     Iterable<? extends JavaFileObject> files = Arrays.asList(file);
                     compile(files);
                     
@@ -100,7 +100,8 @@ public class Server {
                     name = dIn.readUTF();
                     String arr[] = name.split("_");
                     
-                    ArrayList<String> regs = fm.showRegisters(arr[0], arr[1]);
+                    ArrayList<String> regs = fm.showRegisters(arr[0], name);
+                    System.out.println("regs size: "+regs.size());
                     ArrayList<Object> objs = createObjects(regs,name);
                     readObjects(objs,regs);
                     
