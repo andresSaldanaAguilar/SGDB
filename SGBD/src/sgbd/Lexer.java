@@ -21,6 +21,7 @@ public class Lexer {
     private final String[] USE_BD = {"USE DATABASE ", "use database "};
     private final String[] DROP_BD = {"DROP DATABASE ","drop database "};
     private final String[] INSERT_TB = {"INSERT INTO ","insert into "};
+    private final String[] SELECT_FROM = {"SELECT * FROM ","select * from "};
     
     public String getNameDB(String SQL_QUERY) {
         String name_BD = "";
@@ -64,7 +65,9 @@ public class Lexer {
     public String getNameTable(String SQL_QUERY) {
         String name_Table = "";
         String segment[];
-
+        System.out.println("SQL->GETTABLA: "+SQL_QUERY);
+        
+        
         if (SQL_QUERY.contains(CREATE_TB[0])) {
             segment = SQL_QUERY.split(CREATE_TB[0]);
             name_Table = segment[1];
@@ -91,6 +94,20 @@ public class Lexer {
             name_Table = segment[1];
             if (name_Table.contains("VALUES")) {
                 StringTokenizer token = new StringTokenizer(name_Table, "VALUES");
+                name_Table = token.nextToken();
+            }
+        }else if (SQL_QUERY.contains(SELECT_FROM[0])) {
+            segment = SQL_QUERY.split(SELECT_FROM[0]);
+            name_Table = segment[1];
+            if (name_Table.contains(";")) {
+                StringTokenizer token = new StringTokenizer(name_Table, ";");
+                name_Table = token.nextToken();
+            }
+        }else if (SQL_QUERY.contains(SELECT_FROM[1])) {
+            segment = SQL_QUERY.split(SELECT_FROM[1]);
+            name_Table = segment[1];
+            if (name_Table.contains(";")) {
+                StringTokenizer token = new StringTokenizer(name_Table, ";");
                 name_Table = token.nextToken();
             }
         }else {
@@ -279,24 +296,24 @@ public class Lexer {
             sentence = null;
         }
         /*-----------------------------------------------------*/
-        System.out.println("getregi:"+sentence);
+        //System.out.println("getregi:"+sentence);
         segment = null;
         if (sentence!=null) {
             if (sentence.contains("values")) {
-                System.out.println("Sentence: "+sentence);
+                //System.out.println("Sentence: "+sentence);
                 segment = sentence.split("values");
             }else if(sentence.contains("VALUES")){
-                System.out.println("Sentence: "+sentence);
+                //System.out.println("Sentence: "+sentence);
                 segment = sentence.split("VALUES");
             }
             sentence = "";
             sentence= segment[1];
-            System.out.println("sentence2: "+sentence);
+            //System.out.println("sentence2: "+sentence);
             segment = null;
             segment = sentence.split("\\(|\\)");
             sentence = "";
             sentence = segment[1];
-            System.out.println("sentence3:"+sentence);
+            //System.out.println("sentence3:"+sentence);
             values = sentence;
         }else{
             System.out.println("Error. Registers didn't create");

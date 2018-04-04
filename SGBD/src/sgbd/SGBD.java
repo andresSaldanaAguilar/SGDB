@@ -64,6 +64,9 @@ public class SGBD {
                 if (query.contains("INSERT INTO")||query.contains("insert into")) {
                     dc.INSERT_INTO(query);
                 }
+                if (query.contains("SELECT * FROM")||query.contains("select * from")) {
+                    dc.select_all(query);
+                }
             } while (continua);
         } else {
             System.exit(0);

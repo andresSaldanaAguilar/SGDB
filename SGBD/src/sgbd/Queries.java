@@ -21,6 +21,7 @@ public class Queries {
     private Lexer LEXER;
     private Register REGISTER;
     private Client CL;
+    ArrayList<String> rg = new ArrayList<>();
     
     public Queries(){
         KEY_HASHMAP = "";
@@ -91,6 +92,7 @@ public class Queries {
     }*/
     
     public void USE_DATABASE(String QUERY_USE){
+        rg = new ArrayList<>();
         //TABLE = new Table();
         String MATCH_BD = "";
         MATCH_BD = LEXER.getBD_ToUse(QUERY_USE);
@@ -100,6 +102,7 @@ public class Queries {
         else{
             TABLE.setTABLE((HashMap)DATABASES.get(TABLE.getNAME_DATABASE()));
             System.out.println("Database changed: "+TABLE.getNAME_DATABASE());
+            TABLE.setREGISTRO(rg);
         }
     }
     /*------------------------------------------------------------------*/
@@ -161,13 +164,42 @@ public class Queries {
     }
     
     public String INSERT_INTO(String QUERY_INSERT) throws IOException, ClassNotFoundException{
-        System.out.println("query: "+QUERY_INSERT);
+        //System.out.println("query: "+QUERY_INSERT);
         String BD=TABLE.getNAME_DATABASE();
         String TB=TABLE.getKEY_HASHMAP_TABLE();
         String sentence = BD+"_"+TB+"_"+LEXER.getRegisters(QUERY_INSERT);
-        System.out.println("format insert: ->"+sentence);   
+        insertRegister(LEXER.getRegisters(QUERY_INSERT), TB);
+        //System.out.println("format insert: ->"+sentence);   
         CL.createRegister(sentence);    
         return sentence;
+    }
+    
+    public void insertRegister(String sentence,String TB){       
+        String rgs="";
+        String[] segment = sentence.split(",");
+        
+        for (int i = 0; i < segment.length; i++) 
+            rgs += segment[i]+" ";
+        
+        TABLE.getREGISTRO().add(rgs);
+        System.out.println("Register added");
+    }
+    
+    public void select_all(String QUERY_SELECT){
+        String Table = LEXER.getNameTable(QUERY_SELECT);
+        System.out.println("selec:"+Table);
+        try {
+            if (TABLE.getKEY_HASHMAP_TABLE().equals(Table)) {
+                System.out.println("|--------------------------|");
+                for (int i = 0; i < rg.size(); i++) {
+                    System.out.println("| "+rg.get(i));
+                }
+                System.out.println("|--------------------------|");
+            }else{
+            }
+        } catch (Exception e) {
+            System.err.println("Database not selected");
+        }
     }
     /*------------------------------------------------------------------*/
     
@@ -196,14 +228,18 @@ public class Queries {
     
     public void fill_Tables(String name_BD){
         ArrayList<String> recoverTable;
-        System.out.println("Si entro: "+name_BD);
         try {
             recoverTable = CL.getTables(name_BD);
             for (int i = 0; i < recoverTable.size(); i++) {
+                USE_DATABASE("USE DATABASE "+name_BD);
+                CREATE_TABLE("CREATE TABLE "+recoverTable.get(i));
                 System.out.println(" |-Table: "+recoverTable.get(i));
+                System.out.println("Getting registers from "+recoverTable.get(i));
+                //fill_Register_ByTB(recoverTable.get(i));
             }
+            System.out.println("____________");
         } catch (Exception e) {
-            System.out.println("-aaaa");
+            System.out.println("Error to recovered table from "+name_BD);
         }
     }
     
@@ -216,7 +252,7 @@ public class Queries {
             for (int i = 0; i < old_Tables.size(); i++) {             
                     USE_DATABASE("USE DATABASE "+name_BD);
                     CREATE_TABLE("CREATE TABLE "+old_Tables.get(i));
-                    System.out.println("  |-Tables recover: "+old_Tables.get(i));
+                    System.out.println("  |-Tables recover: "+old_Tables.get(i)); /*HASTA AQUI YA*/
 //                    TB = old_Tables.get(i);
 //                    fill_Register_ByTB(TB);
                     System.out.println("________");
