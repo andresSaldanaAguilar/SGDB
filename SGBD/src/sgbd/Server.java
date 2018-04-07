@@ -46,13 +46,18 @@ public class Server {
                 {
                 //case create database
                 case 1:
+                    System.out.println("Create db action");
                     name = dIn.readUTF();
                     fm.CreateDB(name);
                     break;
                 //case create table
                 case 2:
+                    System.out.println("Create table action");
                     ArrayList<String> al = (ArrayList<String>) dIn.readObject();
                     
+                    for(String cad:al){
+                        System.out.println("action 4:"+cad);
+                    }
                     /*creando la clase (tabla)*/
                     String str = classBuilder(al);
                     JavaFileObject file = getJavaFileObject(str,al.get(0).replace(";",""));
@@ -65,6 +70,7 @@ public class Server {
                     break;
                 //sending databases
                 case 3:
+                    System.out.println("Show databases action");
                     ArrayList<String> databases = fm.getDBs();
                     ObjectOutputStream dout = new ObjectOutputStream(socket.getOutputStream());
                     dout.writeObject(databases);
@@ -73,6 +79,7 @@ public class Server {
                     break;
                  //sending selected tables
                 case 4:
+                    System.out.println("Show tables action");
                     String dbname = dIn.readUTF();
                     ArrayList<String> tables = fm.getTables(dbname);
                     ObjectOutputStream dout1 = new ObjectOutputStream(socket.getOutputStream());
@@ -82,23 +89,28 @@ public class Server {
                     break;
                 //deletes DB
                 case 5:
+                    System.out.println("Delete database action");
                     name = dIn.readUTF();
                     fm.deleteDB(name);
                     break;
                 //deletes Tables
                 case 6:
+                    System.out.println("Delete table action");
                     name = dIn.readUTF();
                     fm.deleteTable(name);
                     break;                    
                 //creates a register on an archive
                 case 7:
+                    System.out.println("Create register action");
                     name = dIn.readUTF();
                     fm.createRegister(name);
                     break;
                 //send all registers from a table;
                 case 8:
+                    System.out.println("Select * from");
                     name = dIn.readUTF();
                     String arr[] = name.split("_");
+                    System.out.println("action 8:"+name);
                     
                     ArrayList<String> regs = fm.showRegisters(arr[0], name);
                     ArrayList<Object> objs = createObjects(regs,name);
@@ -110,8 +122,9 @@ public class Server {
                     System.out.println("Object Sended");
                     
                     break;                
-                //comodin
+                //send attributes from table
                 case 9:
+                    System.out.println("Send attributes from table");
                     name = dIn.readUTF();
                     String arr1[] = name.split("_");
                     

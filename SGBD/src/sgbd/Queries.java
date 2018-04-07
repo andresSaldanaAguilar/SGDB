@@ -228,6 +228,7 @@ public class Queries {
     }
     
     public void fill_Tables(String name_BD){
+        String arr[] =name_BD.split(" ");
         ArrayList<String> recoverTable;
         try {
             recoverTable = CL.getTables(name_BD);
@@ -247,9 +248,9 @@ public class Queries {
     
     public void fill_Register_ByTB(String NAME_BD,String NAME_TB) throws IOException, ClassNotFoundException{
         ArrayList<String> old_Register = new ArrayList();
-        ArrayList<Object> objs =CL.getRegisters(NAME_BD+"_"+NAME_TB);
+        ArrayList<Object> objs =CL.getRegisters(NAME_TB);
         System.out.println(objs.size());
-        ArrayList<String> regs =CL.showRegisters(NAME_BD+"_"+NAME_TB);
+        ArrayList<String> regs =CL.showRegisters(NAME_TB);
         //arreglo con valores de registros de una tabla
         old_Register = readObjects(objs,regs);
         for (int i = 0; i < old_Register.size(); i++) {

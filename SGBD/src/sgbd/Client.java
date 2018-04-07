@@ -141,9 +141,9 @@ public class Client {
 //        tables working good
         
         //ArrayList<String> dbs = c.getTables("db");
-        ArrayList<Object> objs =c.getRegisters("dos_moe");
+        ArrayList<Object> objs =c.getRegisters("uno_vaso");
         System.out.println(objs.size());
-        ArrayList<String> regs =c.showRegisters("dos_moe");
+        ArrayList<String> regs =c.showRegisters("uno_vaso");
         System.out.println(regs.size());
 
         ArrayList<String> li = readObjects(objs,regs);
